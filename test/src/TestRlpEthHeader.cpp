@@ -149,7 +149,7 @@ static constexpr uint8_t sk_ethHeaders_02[] =
 
 GTEST_TEST(TestRlpEthHeader, EthHeader_01)
 {
-	SimpleObjects::List expEthHeader_01 = {
+	SimpleObjects::Object expEthHeader_01 = SimpleObjects::List({
 		// ParentHash
 		SimpleObjects::Bytes({
 			0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U,
@@ -254,7 +254,7 @@ GTEST_TEST(TestRlpEthHeader, EthHeader_01)
 		SimpleObjects::Bytes({
 			0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X42U,
 		}),
-	};
+	});
 
 	ListParser parser;
 	SimpleObjects::Object res;
@@ -269,7 +269,7 @@ GTEST_TEST(TestRlpEthHeader, EthHeader_01)
 GTEST_TEST(TestRlpEthHeader, EthHeader_02)
 {
 
-	SimpleObjects::List expEthHeader_02 = {
+	SimpleObjects::Object expEthHeader_02 = SimpleObjects::List({
 		// ParentHash
 		SimpleObjects::Bytes({
 			0XD4U, 0XE5U, 0X67U, 0X40U, 0XF8U, 0X76U, 0XAEU, 0XF8U, 0XC0U, 0X10U,
@@ -375,7 +375,7 @@ GTEST_TEST(TestRlpEthHeader, EthHeader_02)
 		SimpleObjects::Bytes({
 			0X53U, 0X9BU, 0XD4U, 0X97U, 0X9FU, 0XEFU, 0X1EU, 0XC4U,
 		}),
-	};
+	});
 
 	ListParser parser;
 	SimpleObjects::Object res;

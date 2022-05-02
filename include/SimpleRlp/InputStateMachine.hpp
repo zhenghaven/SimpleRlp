@@ -126,19 +126,19 @@ DecodeRlpLeadingByte(_ValType val, size_t pos)
 	else if (/*(0x80U <= val) && */ // implicit since val > 0x7FU
 			(val <= 0xB7U))
 	{
-		return std::make_pair(RlpEncodeType::BytesShort, (val - 0x80U));
+		return std::make_pair(RlpEncodeType::BytesShort, _ValType(val - 0x80U));
 	}
 	// - Case 3: bytes longer than 55 bytes
 	else if (/*(0xB8U <= val) && */ // implicit since val > 0xB7U
 			(val <= 0xBFU))
 	{
-		return std::make_pair(RlpEncodeType::BytesLong, (val - 0xB7U));
+		return std::make_pair(RlpEncodeType::BytesLong, _ValType(val - 0xB7U));
 	}
 	// - Case 4: list within 55 items
 	else if (/*(0xC0U <= val) && */ // implicit since val > 0xBFU
 			(val <= 0xF7U))
 	{
-		return std::make_pair(RlpEncodeType::ListShort, (val - 0xC0U));
+		return std::make_pair(RlpEncodeType::ListShort, _ValType(val - 0xC0U));
 	}
 	// - Case 5: list with more than 55 items
 	else if (/* (0xF8U <= val) */ // implicit since val > 0xF7U
@@ -146,7 +146,7 @@ DecodeRlpLeadingByte(_ValType val, size_t pos)
 			std::numeric_limits<_ValType>::digits <= 8
 		>::Check(val)) /* same as (val <= 0xFFU) */
 	{
-		return std::make_pair(RlpEncodeType::ListLong, (val - 0xF7U));
+		return std::make_pair(RlpEncodeType::ListLong, _ValType(val - 0xF7U));
 	}
 
 	throw ParseError("Input value should be within the range of 1 byte",

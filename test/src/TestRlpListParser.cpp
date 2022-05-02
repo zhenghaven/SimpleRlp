@@ -31,8 +31,12 @@ GTEST_TEST(TestRlpListParser, ParseCorrect)
 	// list - short
 	{
 		std::vector<uint8_t> testInput = { 0xC0U, };
-		auto res = parser.Parse(testInput);
-		EXPECT_TRUE(res == SimpleObjects::List());
+
+		SimpleObjects::Object expRes = SimpleObjects::List();
+
+		SimpleObjects::Object res;
+		EXPECT_NO_THROW(res = parser.Parse(testInput));
+		EXPECT_TRUE(res == expRes);
 	}
 	{
 		std::vector<uint8_t> testInput = { 0xF7U,
@@ -43,24 +47,31 @@ GTEST_TEST(TestRlpListParser, ParseCorrect)
 			0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U,
 			0x00U, 0x00U, 0x00U, 0x00U, 0x00U,
 		};
-		auto res = parser.Parse(testInput);
+
 		auto zeroB = SimpleObjects::Bytes({ 0x00U, });
-		EXPECT_TRUE(res == SimpleObjects::List({
+		SimpleObjects::Object expRes =  SimpleObjects::List({
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
 			zeroB, zeroB, zeroB, zeroB, zeroB,
-		}));
+		});
+
+		SimpleObjects::Object res;
+		EXPECT_NO_THROW(res = parser.Parse(testInput));
+		EXPECT_TRUE(res == expRes);
 	}
 
 	// list - long
 	{
 		std::vector<uint8_t> testInput = { 0xF8U, 0x00U, };
+
+		SimpleObjects::Object expRes = SimpleObjects::List();
+
 		SimpleObjects::Object res;
 		EXPECT_NO_THROW(res = parser.Parse(testInput));
-		EXPECT_TRUE(res == SimpleObjects::List());
+		EXPECT_TRUE(res == expRes);
 	}
 	{
 		std::vector<uint8_t> testInput = { 0xFFU,
@@ -94,12 +105,10 @@ GTEST_TEST(TestRlpListParser, ParseCorrect)
 			0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U,
 			0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U,
 			0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U,
-
 		};
-		SimpleObjects::Object res;
-		EXPECT_NO_THROW(res = parser.Parse(testInput));
+
 		auto zeroB = SimpleObjects::Bytes({ 0x00U, });
-		EXPECT_TRUE(res == SimpleObjects::List({
+		SimpleObjects::Object expRes = SimpleObjects::List({
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
@@ -128,7 +137,11 @@ GTEST_TEST(TestRlpListParser, ParseCorrect)
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
 			zeroB, zeroB, zeroB, zeroB, zeroB, zeroB,
-		}));
+		});
+
+		SimpleObjects::Object res;
+		EXPECT_NO_THROW(res = parser.Parse(testInput));
+		EXPECT_TRUE(res == expRes);
 	}
 
 	// List - nested list
@@ -152,25 +165,27 @@ GTEST_TEST(TestRlpListParser, ParseCorrect)
 									0xC5U,
 										0xC0U, 0x83U, 'd', 'o', 'g',
 		};
+
+		SimpleObjects::Object expRes;
+		{
+			SimpleObjects::List l1 =
+				{
+					SimpleObjects::List(),
+					SimpleObjects::Bytes({'d', 'o', 'g',}),
+				};
+			SimpleObjects::List l2 = { SimpleObjects::Object(std::move(l1)), };
+			SimpleObjects::List l3 = { SimpleObjects::Object(std::move(l2)), };
+			SimpleObjects::List l4 = { SimpleObjects::Object(std::move(l3)), };
+			SimpleObjects::List l5 = { SimpleObjects::Object(std::move(l4)), };
+			SimpleObjects::List l6 = { SimpleObjects::Object(std::move(l5)), };
+			SimpleObjects::List l7 = { SimpleObjects::Object(std::move(l6)), };
+
+			expRes = std::move(l7);
+		}
+
 		SimpleObjects::Object res;
 		EXPECT_NO_THROW(res = parser.Parse(testInput));
-		EXPECT_TRUE(res ==
-			SimpleObjects::List(
-				{SimpleObjects::List(
-					{SimpleObjects::List(
-						{SimpleObjects::List(
-							{SimpleObjects::List(
-								{SimpleObjects::List(
-									{SimpleObjects::List(
-										{SimpleObjects::List(), SimpleObjects::Bytes({'d', 'o', 'g',})}
-									)}
-								)}
-							)}
-						)}
-					)}
-				)}
-			)
-		);
+		EXPECT_TRUE(res == expRes);
 	}
 
 }
