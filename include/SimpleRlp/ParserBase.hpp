@@ -5,8 +5,10 @@
 
 #pragma once
 
-#include "InputStateMachine.hpp"
 #include "Internal/SimpleObjects.hpp"
+
+#include "InputStateMachine.hpp"
+#include "RlpDecoding.hpp"
 
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE
 namespace SimpleRlp

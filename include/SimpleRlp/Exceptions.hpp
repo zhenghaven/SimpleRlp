@@ -30,6 +30,7 @@ public:
 
 }; // class Exception
 
+
 /**
  * @brief This exception is thrown when error occurred during parsing.
  */
@@ -85,18 +86,42 @@ private:
 	size_t m_bytePos;
 }; // class ParseError
 
+
 /**
  * @brief This exception is thrown when error occurred during writing object to
  *        RLP bytes
  */
-class SerializeTypeError : public Exception
+class SerializeError : public Exception
 {
 
 public:
 
-	explicit SerializeTypeError(
-		const std::string typeName) :
-		Exception("Cannot serialize type " + typeName + " into RLP")
+	explicit SerializeError(const std::string& errMsg) :
+		Exception(errMsg)
+	{}
+
+	// LCOV_EXCL_START
+	/**
+	 * @brief Destroy the SerializeError object
+	 *
+	 */
+	virtual ~SerializeError() = default;
+	// LCOV_EXCL_STOP
+
+}; // class SerializeError
+
+
+/**
+ * @brief This exception is thrown when error occurred during writing object to
+ *        RLP bytes
+ */
+class SerializeTypeError : public SerializeError
+{
+
+public:
+
+	explicit SerializeTypeError(const std::string& typeName) :
+		SerializeError("Cannot serialize type " + typeName + " into RLP")
 	{}
 
 	// LCOV_EXCL_START
@@ -108,5 +133,6 @@ public:
 	// LCOV_EXCL_STOP
 
 }; // class SerializeTypeError
+
 
 } // namespace SimpleRlp

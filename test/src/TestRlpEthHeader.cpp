@@ -256,9 +256,8 @@ GTEST_TEST(TestRlpEthHeader, EthHeader_01)
 		}),
 	});
 
-	ListParser parser;
 	SimpleObjects::Object res;
-	EXPECT_NO_THROW(res = parser.Parse(
+	EXPECT_NO_THROW(res = ParseRlp(
 		std::vector<uint8_t>(
 			std::begin(sk_ethHeaders_01), std::end(sk_ethHeaders_01))
 	));
@@ -377,9 +376,8 @@ GTEST_TEST(TestRlpEthHeader, EthHeader_02)
 		}),
 	});
 
-	ListParser parser;
 	SimpleObjects::Object res;
-	EXPECT_NO_THROW(res = parser.Parse(
+	EXPECT_NO_THROW(res = ParseRlp(
 		std::vector<uint8_t>(
 			std::begin(sk_ethHeaders_02), std::end(sk_ethHeaders_02))
 	));

@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include <SimpleRlp/RlpDecoding.hpp>
 #include <SimpleRlp/InputStateMachine.hpp>
 
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE

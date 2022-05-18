@@ -224,3 +224,22 @@ GTEST_TEST(TestRlpListParser, ParseError)
 			ParseError);
 	}
 }
+
+GTEST_TEST(TestRlpListParser, UnknownRlpEncodeType)
+{
+	using _ISM = ListParser::ISMType;
+	std::vector<uint8_t> testInput = {0x00U};
+	_ISM ism(
+		Internal::Obj::ToFrIt<true>(testInput.cbegin()),
+		Internal::Obj::ToFrIt<true>(testInput.cend()));
+
+	RlpEncodeType unknownType = static_cast<RlpEncodeType>(123);
+
+	{
+		size_t byteLeft = 0;
+		EXPECT_THROW(
+			GeneralParser().Parse(ism, unknownType, 0x00U, byteLeft);,
+			ParseError
+		);
+	}
+}
