@@ -8,6 +8,7 @@
 #include "BytesParser.hpp"
 #include "ListParser.hpp"
 #include "GeneralParser.hpp"
+#include "StaticDictParser.hpp"
 
 #include "Writer.hpp"
 
@@ -27,8 +28,6 @@ using RetObjType   = Internal::Obj::Object;
 using BytesObjType = Internal::Obj::Bytes;
 using ListObjType  = Internal::Obj::List;
 
-using BytesBaseObjType = Internal::Obj::BytesBaseObj;
-using ListBaseObjType  = Internal::Obj::ListBaseObj;
 
 //====================
 // Parser
@@ -62,13 +61,35 @@ using GeneralParser =
 		ListParser,
 		RetObjType>;
 
+template<
+	typename _ParserTp,
+	bool _AllowMissingItem,
+	bool _AllowExtraItem,
+	typename _StaticDictType = AutoPlaceholder>
+using StaticDictParserT = StaticDictParserImpl<
+	InputContainerType,
+	ByteValType,
+	_ParserTp,
+	GeneralParser,
+	_AllowMissingItem,
+	_AllowExtraItem,
+	typename std::conditional<
+			std::is_same<_StaticDictType, AutoPlaceholder>::value,
+			Internal::Obj::StaticDict<
+				typename Internal::DParserTuple2TupleCore<_ParserTp>::type>,
+			_StaticDictType
+		>::type
+	>;
+
+
 //====================
 // Writer
 //====================
 
-using WriterBytes = WriterBytesImpl<BytesBaseObjType, OutputContainerType>;
-
-using WriterList =
-	WriterListImpl<ListBaseObjType, OutputContainerType, WriterBytes>;
+using WriterGeneric = WriterGenericImpl<
+	OutputContainerType,
+	WriterBytesImpl,
+	WriterListImpl,
+	WriterStaticDictImpl>;
 
 } // namespace SimpleRlp

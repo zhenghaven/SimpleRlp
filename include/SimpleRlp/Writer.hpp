@@ -23,11 +23,12 @@ struct OutContainerConcat
 	}
 }; // struct OutContainerConcat
 
-template<typename _BytesObjType, typename _OutCtnType>
+template<typename _OutCtnType>
 struct WriterBytesImpl
 {
 	using Concatenator = OutContainerConcat<_OutCtnType>;
 
+	template<typename _BytesObjType>
 	inline static _OutCtnType Write(const _BytesObjType& inBytes)
 	{
 		using _OutCtnValType = typename _OutCtnType::value_type;
@@ -50,44 +51,90 @@ struct WriterBytesImpl
 
 }; // struct WriterBytesImpl
 
-template<typename _ListObjType, typename _OutCtnType, typename _BytesWriter>
+template<typename _OutCtnType, typename _GenericWriter>
 struct WriterListImpl
 {
-	using Self = WriterListImpl<_ListObjType, _OutCtnType, _BytesWriter>;
+	using Self = WriterListImpl<_OutCtnType, _GenericWriter>;
 
-	using BytesWriter = _BytesWriter;
+	using GenericWriter = _GenericWriter;
 	using Concatenator = OutContainerConcat<_OutCtnType>;
 
+	template<typename _ListObjType>
 	inline static _OutCtnType Write(const _ListObjType& inList)
 	{
 		_OutCtnType outBytes;
 
 		for (const auto& item : inList)
 		{
-			switch (item.GetCategory())
-			{
-			case Internal::Obj::ObjCategory::List:
-			{
-				auto subBytes = Self::Write(item.AsList());
-				Concatenator()(outBytes, subBytes);
-			}
-			break;
-
-			case Internal::Obj::ObjCategory::Bytes:
-			{
-				auto subBytes = BytesWriter::Write(item.AsBytes());
-				Concatenator()(outBytes, subBytes);
-			}
-			break;
-
-			default:
-				throw SerializeTypeError(item.GetCategoryName());
-			}
+			auto subBytes = GenericWriter::Write(item);
+			Concatenator()(outBytes, subBytes);
 		}
 
 		return SerializeBytes(RlpEncTypeCat::List, outBytes, Concatenator());
 	}
 
 }; // struct WriterListImpl
+
+template<typename _OutCtnType, typename _GenericWriter>
+struct WriterStaticDictImpl
+{
+	using Self = WriterStaticDictImpl<_OutCtnType, _GenericWriter>;
+
+	using GenericWriter = _GenericWriter;
+	using Concatenator = OutContainerConcat<_OutCtnType>;
+
+	template<typename _StaticDictObjType>
+	inline static _OutCtnType Write(const _StaticDictObjType& inDict)
+	{
+		_OutCtnType outBytes;
+
+		for (const auto& item : inDict)
+		{
+			auto subBytes = GenericWriter::Write(item.second.get());
+			Concatenator()(outBytes, subBytes);
+		}
+
+		return SerializeBytes(RlpEncTypeCat::List, outBytes, Concatenator());
+	}
+
+}; // struct WriterStaticDictImpl
+
+template<
+	typename _OutCtnType,
+	template<typename> class _BytesWriterT,
+	template<typename, typename> class _ListWriterT,
+	template<typename, typename> class _StaticDictWriterT>
+struct WriterGenericImpl
+{
+	using Self = WriterGenericImpl<
+		_OutCtnType,
+		_BytesWriterT,
+		_ListWriterT,
+		_StaticDictWriterT>;
+
+	using BytesWriter      = _BytesWriterT<_OutCtnType>;
+	using ListWriter       = _ListWriterT<_OutCtnType, Self>;
+	using StaticDictWriter = _StaticDictWriterT<_OutCtnType, Self>;
+
+	template<typename _GenericObjType>
+	inline static _OutCtnType Write(const _GenericObjType& obj)
+	{
+		switch (obj.GetCategory())
+		{
+		case Internal::Obj::ObjCategory::Bytes:
+			return BytesWriter::Write(obj.AsBytes());
+
+		case Internal::Obj::ObjCategory::List:
+			return ListWriter::Write(obj.AsList());
+
+		case Internal::Obj::ObjCategory::StaticDict:
+			return StaticDictWriter::Write(obj.AsStaticDict());
+
+		default:
+			throw SerializeTypeError(obj.GetCategoryName());
+		}
+	}
+
+}; // struct WriterGenericImpl
 
 } // namespace SimpleRlp

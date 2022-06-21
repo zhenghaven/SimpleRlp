@@ -46,6 +46,12 @@ struct TransformByteToBytes
 struct SelfParserPlaceholder {};
 
 /**
+ * @brief Placeholder for Auto/Default types
+ *
+ */
+struct AutoPlaceholder {};
+
+/**
  * @brief Basic implementation of Parsers
  *
  * @tparam _ContainerType Type of containers used as input

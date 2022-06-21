@@ -28,7 +28,7 @@ GTEST_TEST(TestRlpWriter, TwoWaysConvertTest_B01)
 {
 	SimpleObjects::Object testObj = SimpleObjects::Bytes({0x00U});
 
-	auto rlp = WriterBytes::Write(testObj.AsBytes());
+	auto rlp = WriteRlp(testObj);
 	auto parsedRes = ParseRlp(rlp);
 
 	EXPECT_EQ(parsedRes, testObj);
@@ -38,7 +38,7 @@ GTEST_TEST(TestRlpWriter, TwoWaysConvertTest_B02)
 {
 	SimpleObjects::Object testObj = SimpleObjects::Bytes({0xFFU});
 
-	auto rlp = WriterBytes::Write(testObj.AsBytes());
+	auto rlp = WriteRlp(testObj);
 	auto parsedRes = ParseRlp(rlp);
 
 	EXPECT_EQ(parsedRes, testObj);
@@ -70,7 +70,7 @@ GTEST_TEST(TestRlpWriter, TwoWaysConvertTest_B03)
 {
 	SimpleObjects::Object testObj = GetTestLongBytes();
 
-	auto rlp = WriterBytes::Write(testObj.AsBytes());
+	auto rlp = WriteRlp(testObj);
 	auto parsedRes = ParseRlp(rlp);
 
 	EXPECT_EQ(parsedRes, testObj);
@@ -92,7 +92,7 @@ GTEST_TEST(TestRlpWriter, TwoWaysConvertTest_L01)
 		GetTestLongBytes(),
 	});
 
-	auto rlp = WriterList::Write(testObj.AsList());
+	auto rlp = WriteRlp(testObj);
 	auto parsedRes = ParseRlp(rlp);
 
 	EXPECT_EQ(parsedRes, testObj);
@@ -154,7 +154,7 @@ GTEST_TEST(TestRlpWriter, TwoWaysConvertTest_L02)
 		GetTestLongList(),
 	});
 
-	auto rlp = WriterList::Write(testObj.AsList());
+	auto rlp = WriteRlp(testObj);
 	auto parsedRes = ParseRlp(rlp);
 
 	EXPECT_EQ(parsedRes, testObj);
@@ -231,7 +231,7 @@ GTEST_TEST(TestRlpWriter, InvalidObjType)
 			SimpleObjects::Dict(),
 		});
 
-		EXPECT_THROW(WriterList::Write(testObj.AsList());, SerializeTypeError);
+		EXPECT_THROW(WriteRlp(testObj);, SerializeTypeError);
 	}
 
 	{

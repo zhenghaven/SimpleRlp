@@ -21,17 +21,7 @@ inline RetObjType ParseRlp(const InputContainerType& inBytes)
 
 inline OutputContainerType WriteRlp(const Internal::Obj::BaseObj& obj)
 {
-	switch (obj.GetCategory())
-	{
-	case Internal::Obj::ObjCategory::Bytes:
-		return WriterBytes::Write(obj.AsBytes());
-
-	case Internal::Obj::ObjCategory::List:
-		return WriterList::Write(obj.AsList());
-
-	default:
-		throw SerializeTypeError(obj.GetCategoryName());
-	}
+	return WriterGeneric::Write(obj);
 }
 
 } // namespace SimpleRlp
