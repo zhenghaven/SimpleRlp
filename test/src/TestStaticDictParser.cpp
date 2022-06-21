@@ -5,7 +5,6 @@
 
 #include <gtest/gtest.h>
 
-#include <SimpleObjects/StaticDict.hpp>
 #include <SimpleRlp/SimpleRlp.hpp>
 
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE
