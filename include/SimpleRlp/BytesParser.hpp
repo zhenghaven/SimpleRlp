@@ -20,11 +20,11 @@ template<
 	typename _BytesType,
 	typename _ByteTransformFunc,
 	typename _BytesTransformFunc,
-	typename _RetType>
+	typename _RetType = typename _BytesTransformFunc::RetType>
 class BytesParserImpl :
 	public ParserBase<_ContainerType, _ByteValType, _RetType>
 {
-public: // public members:
+public: // static members:
 
 	using Self =
 		BytesParserImpl<
@@ -47,7 +47,7 @@ public:
 	BytesParserImpl() = default;
 
 	// LCOV_EXCL_START
-	~BytesParserImpl() = default;
+	virtual ~BytesParserImpl() = default;
 	// LCOV_EXCL_STOP
 
 	using Base::Parse;

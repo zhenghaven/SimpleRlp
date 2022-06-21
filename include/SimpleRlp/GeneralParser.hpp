@@ -27,7 +27,7 @@ template<
 class GeneralParserImpl :
 	public ParserBase<_ContainerType, _ByteValType, _RetType>
 {
-public: // public members:
+public: // static members:
 
 	using Self =
 		GeneralParserImpl<

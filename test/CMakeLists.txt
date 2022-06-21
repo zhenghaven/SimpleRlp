@@ -83,5 +83,6 @@ set_property(TARGET SimpleRlp_test
 	PROPERTY CXX_STANDARD ${SIMPLERLP_TEST_CXX_STANDARD})
 
 if (SIMPLERLP_TEST_LCOV)
+	message(STATUS "Setting up test coverage target...")
 	setup_cxx_test_coverage(SimpleRlp_test "${PROJECT_SOURCE_DIR}/include")
 endif()

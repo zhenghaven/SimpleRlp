@@ -24,13 +24,13 @@ template<
 	typename _ByteValType,
 	typename _ObjType,
 	typename _TransformFunc,
-	typename _RetType,
 	typename _InnerBytesParserType,
-	typename _InnerListParserType>
+	typename _InnerListParserType,
+	typename _RetType = typename _TransformFunc::RetType>
 class ListParserImpl :
 	public ParserBase<_ContainerType, _ByteValType, _RetType>
 {
-public: // public members:
+public: // static members:
 
 	using Self =
 		ListParserImpl<
@@ -38,9 +38,9 @@ public: // public members:
 			_ByteValType,
 			_ObjType,
 			_TransformFunc,
-			_RetType,
 			_InnerBytesParserType,
-			_InnerListParserType>;
+			_InnerListParserType,
+			_RetType>;
 	using Base = ParserBase<_ContainerType, _ByteValType, _RetType>;
 
 	using InnerBytesParser = _InnerBytesParserType;
@@ -63,7 +63,7 @@ public:
 	{}
 
 	// LCOV_EXCL_START
-	~ListParserImpl() = default;
+	virtual ~ListParserImpl() = default;
 	// LCOV_EXCL_STOP
 
 	virtual const InnerBytesParser& GetBytesParser() const

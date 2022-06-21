@@ -17,19 +17,22 @@ namespace SIMPLERLP_CUSTOMIZED_NAMESPACE
 #endif
 {
 
+template<typename _T>
 struct TransformPassthrough
 {
-	template<typename _T>
-	typename std::remove_reference<_T>::type
-	operator()(_T v)
+	using RetType = _T;
+
+	_T operator()(_T&& v)
 	{
-		return v;
+		return std::forward<_T>(v);
 	}
 }; // struct TransformPassthrough
 
 template<typename _ValType, typename _BytesType>
 struct TransformByteToBytes
 {
+	using RetType = _BytesType;
+
 	_BytesType operator()(_ValType val)
 	{
 		return _BytesType({ val });

@@ -40,8 +40,7 @@ using BytesParser =
 		ByteValType,
 		BytesObjType,
 		TransformByteToBytes<ByteValType, BytesObjType>,
-		TransformPassthrough,
-		RetObjType>;
+		TransformPassthrough<BytesObjType> >;
 
 template<typename _InnerBytesParser, typename _InnerListParser>
 using ListParserT =
@@ -49,8 +48,7 @@ using ListParserT =
 		InputContainerType,
 		ByteValType,
 		ListObjType,
-		TransformPassthrough,
-		RetObjType,
+		TransformPassthrough<ListObjType>,
 		_InnerBytesParser,
 		_InnerListParser>;
 

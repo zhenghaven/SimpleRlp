@@ -123,13 +123,13 @@ struct DecodeRlpLeadingByteImpl<_ValType, false>
 		{
 			return std::make_pair(RlpEncodeType::BytesLong, _ValType(val - 0xB7U));
 		}
-		// - Case 4: list within 55 items
+		// - Case 4: list within 55 bytes
 		else if (/*(0xC0U <= val) && */ // implicit since val > 0xBFU
 				(val <= 0xF7U))
 		{
 			return std::make_pair(RlpEncodeType::ListShort, _ValType(val - 0xC0U));
 		}
-		// - Case 5: list with more than 55 items
+		// - Case 5: list with more than 55 bytes
 		else if (/* (0xF8U <= val) */ // implicit since val > 0xF7U
 			Internal::IsValWithinAByte<_ValType,
 				std::numeric_limits<_ValType>::digits <= 8

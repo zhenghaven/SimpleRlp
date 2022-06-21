@@ -32,18 +32,18 @@ GTEST_TEST(TestRlpBytesParser, ParseCorrect)
 	{
 		std::vector<uint8_t> testInput = { 0x00U, };
 
-		SimpleObjects::Object expRes = SimpleObjects::Bytes({ 0x00U, });
+		SimpleObjects::Bytes expRes = SimpleObjects::Bytes({ 0x00U, });
 
-		SimpleObjects::Object res;
+		SimpleObjects::Bytes res;
 		EXPECT_NO_THROW(res = parser.Parse(testInput));
 		EXPECT_TRUE(res == expRes);
 	}
 	{
 		std::vector<uint8_t> testInput = { 0x7FU, };
 
-		SimpleObjects::Object expRes = SimpleObjects::Bytes({ 0x7FU, });
+		SimpleObjects::Bytes expRes = SimpleObjects::Bytes({ 0x7FU, });
 
-		SimpleObjects::Object res;
+		SimpleObjects::Bytes res;
 		EXPECT_NO_THROW(res = parser.Parse(testInput));
 		EXPECT_TRUE(res == expRes);
 	}
@@ -52,9 +52,9 @@ GTEST_TEST(TestRlpBytesParser, ParseCorrect)
 	{
 		std::vector<uint8_t> testInput = { 0x80U, };
 
-		SimpleObjects::Object expRes = SimpleObjects::Bytes();
+		SimpleObjects::Bytes expRes = SimpleObjects::Bytes();
 
-		SimpleObjects::Object res;
+		SimpleObjects::Bytes res;
 		EXPECT_NO_THROW(res = parser.Parse(testInput));
 		EXPECT_TRUE(res == expRes);
 	}
@@ -68,7 +68,7 @@ GTEST_TEST(TestRlpBytesParser, ParseCorrect)
 			0xFBU, 0xFCU, 0xFDU, 0xFEU, 0xFFU,
 		};
 
-		SimpleObjects::Object expRes =  SimpleObjects::Bytes({
+		SimpleObjects::Bytes expRes =  SimpleObjects::Bytes({
 			0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x08U, 0x09U,
 			0x0AU, 0x0BU, 0x0CU, 0x0DU, 0x0EU, 0x0FU, 0x10U, 0x11U, 0x12U, 0x13U,
 			0x14U, 0x15U, 0x16U, 0x17U, 0x18U, 0x19U, 0x1AU, 0x1BU, 0x1CU, 0x1DU,
@@ -77,7 +77,7 @@ GTEST_TEST(TestRlpBytesParser, ParseCorrect)
 			0xFBU, 0xFCU, 0xFDU, 0xFEU, 0xFFU,
 		});
 
-		SimpleObjects::Object res;
+		SimpleObjects::Bytes res;
 		EXPECT_NO_THROW(res = parser.Parse(testInput));
 		EXPECT_TRUE(res == expRes);
 	}
@@ -86,9 +86,9 @@ GTEST_TEST(TestRlpBytesParser, ParseCorrect)
 	{
 		std::vector<uint8_t> testInput = { 0xB8U, 0x00U, };
 
-		SimpleObjects::Object expRes = SimpleObjects::Bytes();
+		SimpleObjects::Bytes expRes = SimpleObjects::Bytes();
 
-		SimpleObjects::Object res;
+		SimpleObjects::Bytes res;
 		EXPECT_NO_THROW(res = parser.Parse(testInput));
 		EXPECT_TRUE(res == expRes);
 	}
@@ -127,7 +127,7 @@ GTEST_TEST(TestRlpBytesParser, ParseCorrect)
 
 		};
 
-		SimpleObjects::Object expRes = SimpleObjects::Bytes({
+		SimpleObjects::Bytes expRes = SimpleObjects::Bytes({
 			0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x08U, 0x09U,
 			0xF6U, 0xF7U, 0xF8U, 0xF9U, 0xFAU, 0xFBU, 0xFCU, 0xFDU, 0xFEU, 0xFFU,
 			0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, 0x06U, 0x07U, 0x08U, 0x09U,
@@ -158,7 +158,7 @@ GTEST_TEST(TestRlpBytesParser, ParseCorrect)
 			0xF6U, 0xF7U, 0xF8U, 0xF9U, 0xFAU, 0xFBU,
 		});
 
-		SimpleObjects::Object res;
+		SimpleObjects::Bytes res;
 		EXPECT_NO_THROW(res = parser.Parse(testInput));
 		EXPECT_TRUE(res == expRes);
 	}
