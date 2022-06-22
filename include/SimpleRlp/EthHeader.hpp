@@ -131,7 +131,7 @@ public: // static members:
 
 public:
 
-	using Base::StaticDictImpl;
+	using Base::Base;
 
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ParentHash")> >
 	get_ParentHash()
