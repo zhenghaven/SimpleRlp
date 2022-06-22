@@ -133,181 +133,181 @@ public:
 
 	using Base::StaticDictImpl;
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ParentHash")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ParentHash")> >
 	get_ParentHash()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ParentHash")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ParentHash")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ParentHash")> >
 	get_ParentHash() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ParentHash")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Sha3Uncles")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Sha3Uncles")> >
 	get_Sha3Uncles()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Sha3Uncles")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Sha3Uncles")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Sha3Uncles")> >
 	get_Sha3Uncles() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Sha3Uncles")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Miner")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Miner")> >
 	get_Miner()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Miner")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Miner")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Miner")> >
 	get_Miner() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Miner")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("StateRoot")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("StateRoot")> >
 	get_StateRoot()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("StateRoot")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("StateRoot")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("StateRoot")> >
 	get_StateRoot() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("StateRoot")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("TransactionsRoot")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("TransactionsRoot")> >
 	get_TransactionsRoot()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("TransactionsRoot")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("TransactionsRoot")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("TransactionsRoot")> >
 	get_TransactionsRoot() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("TransactionsRoot")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ReceiptsRoot")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ReceiptsRoot")> >
 	get_ReceiptsRoot()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ReceiptsRoot")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ReceiptsRoot")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ReceiptsRoot")> >
 	get_ReceiptsRoot() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ReceiptsRoot")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("LogsBloom")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("LogsBloom")> >
 	get_LogsBloom()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("LogsBloom")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("LogsBloom")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("LogsBloom")> >
 	get_LogsBloom() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("LogsBloom")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Difficulty")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Difficulty")> >
 	get_Difficulty()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Difficulty")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Difficulty")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Difficulty")> >
 	get_Difficulty() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Difficulty")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Number")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Number")> >
 	get_Number()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Number")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Number")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Number")> >
 	get_Number() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Number")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasLimit")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasLimit")> >
 	get_GasLimit()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("GasLimit")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasLimit")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasLimit")> >
 	get_GasLimit() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("GasLimit")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasUsed")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasUsed")> >
 	get_GasUsed()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("GasUsed")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasUsed")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasUsed")> >
 	get_GasUsed() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("GasUsed")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Timestamp")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Timestamp")> >
 	get_Timestamp()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Timestamp")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Timestamp")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Timestamp")> >
 	get_Timestamp() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Timestamp")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ExtraData")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ExtraData")> >
 	get_ExtraData()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ExtraData")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ExtraData")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ExtraData")> >
 	get_ExtraData() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ExtraData")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("MixHash")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("MixHash")> >
 	get_MixHash()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("MixHash")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("MixHash")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("MixHash")> >
 	get_MixHash() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("MixHash")> >();
 	}
 
-	typename Base::GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Nonce")> >
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Nonce")> >
 	get_Nonce()
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Nonce")> >();
 	}
 
-	typename Base::GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Nonce")> >
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Nonce")> >
 	get_Nonce() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Nonce")> >();
