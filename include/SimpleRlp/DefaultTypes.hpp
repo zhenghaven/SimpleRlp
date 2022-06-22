@@ -12,6 +12,8 @@
 
 #include "Writer.hpp"
 
+#include "EthHeader.hpp"
+
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE
 namespace SimpleRlp
 #else
@@ -91,5 +93,19 @@ using WriterGeneric = WriterGenericImpl<
 	WriterBytesImpl,
 	WriterListImpl,
 	WriterStaticDictImpl>;
+
+
+//====================
+// Ethereum
+//====================
+
+using EthHeader = EthHeaderImpl<BytesObjType>;
+
+using EthHeaderParser = StaticDictParserT<
+		Internal::EthHeaderParserTupleCore<BytesParser>,
+		false,
+		false,
+		EthHeader>;
+
 
 } // namespace SimpleRlp
