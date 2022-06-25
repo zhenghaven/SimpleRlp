@@ -44,11 +44,12 @@ the traditional RLP.
 
 ## Detailed Specification for Data Types
 
+
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x00"></a>
 
 ### CAT-0x00.RLP
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
@@ -62,11 +63,12 @@ The data types supported by the regular RLP is still very useful to us,
 thus, we dedicated CAT ID `0x00` to indicate the encoded data is a
 regular RLP data.
 
+
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x01"></a>
 
 ### CAT-0x01.Null
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
@@ -79,11 +81,11 @@ regular RLP data.
 - This represents `null`, which is like `null` in JSON, or `None` in python
 
 
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x02"></a>
 
 ### CAT-0x02.False
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
@@ -92,11 +94,11 @@ regular RLP data.
 |   `0x02`    |     None        | None                               |
 
 
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x03"></a>
 
 ### CAT-0x03.True
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
@@ -105,11 +107,11 @@ regular RLP data.
 |   `0x03`    |     None        | None                               |
 
 
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x04"></a>
 
 ### CAT-0x04.Integer
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
@@ -133,11 +135,11 @@ regular RLP data.
 - The integer value stored in raw data is in little-endian
 
 
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x05"></a>
 
 ### CAT-0x05.Float (Draft, work-in-progress)
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
@@ -168,11 +170,11 @@ regular RLP data.
 - This data type is not planned to be implemented in the early release
 
 
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x08"></a>
 
 ### CAT-0x08.String
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
@@ -202,11 +204,11 @@ regular RLP data.
     when needed
 
 
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x20"></a>
 
 ### CAT-0x20.Array
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
@@ -223,11 +225,11 @@ regular RLP data.
 |                      |  little-endian                  |               |          |
 
 
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x22"></a>
 
 ### CAT-0x22.Dictionary
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
@@ -254,11 +256,11 @@ regular RLP data.
   - `key1`, `value1`, `key2`, `value2`, `key3`, `value3`, ...
 
 
+[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
+
 <a id="cat-0x23"></a>
 
 ### CAT-0x23.StaticDictionary
-
-[<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
 #### Encoding layout
 
