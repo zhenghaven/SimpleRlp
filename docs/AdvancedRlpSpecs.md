@@ -6,7 +6,20 @@ The RLP encoding format is able to encode a series of bytes and lists that
 contain a series of bytes or another list.
 The resulting binary data is deterministic, thus, the same message content
 should always produce the same hash.
-However, it only supports very limited data types.
+However, it only supports very limited data types, such as bytes and lists, as
+shown below.
+
+```
+Bytes    ::= null               # A bytes string could be empty
+           | Byte               # or, only contain a single byte
+           | Byte, Bytes        # or, a sequence of bytes
+
+ListItem ::= Bytes              # The item in a list could be a byte string
+           | List               # or, a nested list
+
+List     ::= null               # A list could be empty
+           | ListItem, ...      # or, contain one or more items
+```
 
 To support more data types, we introduce the formal definition of
 *Advanced RLP*,
