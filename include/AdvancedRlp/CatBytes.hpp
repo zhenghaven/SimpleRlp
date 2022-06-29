@@ -1,0 +1,138 @@
+// Copyright (c) 2022 Haofan Zheng
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
+#pragma once
+
+#include "ParserUtils.hpp"
+
+#ifndef ADVANCEDRLP_CUSTOMIZED_NAMESPACE
+namespace AdvancedRlp
+#else
+namespace ADVANCEDRLP_CUSTOMIZED_NAMESPACE
+#endif
+{
+
+
+// ====================
+// Parsers
+// ====================
+
+
+template<typename _ListObjType>
+inline void PreCheckCatBytes(size_t pos, const _ListObjType& l)
+{
+	using namespace Internal::SimRlp::Internal::Obj;
+	Internal::CheckRlpListTypeSizeEq("CAT Bytes", pos, l,
+		std::pair<std::string, ObjCategory>("Bytes", ObjCategory::Bytes),
+		std::pair<std::string, ObjCategory>("Bytes", ObjCategory::Bytes)
+	);
+
+	const auto& specs = l[0].AsBytes();
+	if (specs.size() != 1)
+	{
+		throw ParseError(
+			"CAT Bytes's specs bytes should be exactly 1 byte",
+			pos);
+	}
+	if (GetCatIdFromByte(specs[0]) != CatId::Bytes)
+	{
+		throw ParseError(
+			"The given RLP list is not in CAT Bytes",
+			pos);
+	}
+}
+
+
+template<
+	typename _ListObjType,
+	typename _RlpParser>
+struct TransformCatBytes
+{
+	using RetType = typename _RlpParser::RetType;
+
+
+	RetType operator()(size_t pos, _ListObjType&& l)
+	{
+		PreCheckCatBytes(pos, l);
+
+		const auto& rawDataObj = l[1].AsBytes();
+
+		Internal::SimRlp::InputContainerType regularRlp(
+			rawDataObj.data(), rawDataObj.data() + rawDataObj.size());
+
+		return _RlpParser().Parse(regularRlp);
+	}
+}; // struct TransformCatBytes
+
+
+template<typename _InnerRlpParser>
+using CatBytesParserT = Internal::SimRlp::ListParserImpl<
+	Internal::SimRlp::InputContainerType,
+	Internal::SimRlp::ByteValType,
+	Internal::SimRlp::ListObjType,
+	TransformCatBytes<
+		Internal::SimRlp::ListObjType,
+		_InnerRlpParser>,
+	Internal::SimRlp::BytesParser,
+	Internal::SimRlp::SelfParserPlaceholder>;
+
+
+using CatBytesParser = CatBytesParserT<Internal::SimRlp::BytesParser>;
+
+
+// ====================
+// Writers
+// ====================
+
+
+template<
+	typename _OutCtnType,
+	typename _RlpBytesWriter>
+struct CatBytesWriterImpl
+{
+	using Self = CatBytesWriterImpl<_OutCtnType, _RlpBytesWriter>;
+
+	using RlpBytesWriter  = _RlpBytesWriter;
+
+	using Concatenator = Internal::SimRlp::OutContainerConcat<_OutCtnType>;
+
+
+	template<typename _BytesObjType>
+	inline static _OutCtnType Write(const _BytesObjType& inBytes)
+	{
+		Concatenator ccntr;
+		_OutCtnType outBytes;
+
+		// 1.specs
+		outBytes.push_back(SerializeCatId(CatId::Bytes));
+
+		// 2.raw data
+		auto rawData = RlpBytesWriter::Write(inBytes);
+		rawData = Internal::SimRlp::
+			SerializeBytes(
+				Internal::SimRlp::RlpEncTypeCat::Bytes,
+				rawData,
+				ccntr);
+		ccntr(outBytes, rawData);
+
+		// 3.build RLP list
+		return Internal::SimRlp::
+			SerializeBytes(
+				Internal::SimRlp::RlpEncTypeCat::List,
+				outBytes,
+				ccntr);
+	}
+
+}; // struct CatBytesWriterImpl
+
+
+using CatBytesWriter =
+	CatBytesWriterImpl<
+		Internal::SimRlp::OutputContainerType,
+		Internal::SimRlp::WriterBytesImpl<
+			Internal::SimRlp::OutputContainerType> >;
+
+
+} // namespace AdvancedRlp

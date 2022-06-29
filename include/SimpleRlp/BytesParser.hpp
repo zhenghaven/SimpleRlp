@@ -99,7 +99,7 @@ public:
 				static_cast<BytesTypeValueType>(ism.GetByteAndAdv()));
 		}
 
-		return _BytesTransformFunc()(std::move(obj));
+		return _BytesTransformFunc()(ism.GetBytesCount(), std::move(obj));
 	}
 
 }; // class BytesParserImpl

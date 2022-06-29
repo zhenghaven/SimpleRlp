@@ -22,8 +22,10 @@ struct TransformPassthrough
 {
 	using RetType = _T;
 
-	_T operator()(_T&& v)
+	_T operator()(size_t pos, _T&& v)
 	{
+		(void)pos;
+
 		return std::forward<_T>(v);
 	}
 }; // struct TransformPassthrough

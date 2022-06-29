@@ -159,7 +159,7 @@ public:
 			}
 		}
 
-		return _TransformFunc()(std::move(obj));
+		return _TransformFunc()(ism.GetBytesCount(), std::move(obj));
 	}
 
 private:
