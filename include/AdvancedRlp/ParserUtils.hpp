@@ -5,6 +5,10 @@
 
 #pragma once
 
+#include <cstring>
+
+#include "Internal/SimpleRlp.hpp"
+
 #include "CatId.hpp"
 #include "Exceptions.hpp"
 
@@ -95,6 +99,35 @@ inline void CheckRlpListTypeSizeEq(
 	// check object categories
 	CheckObjCat(catName, pos, l, 0, objCat...);
 }
+
+
+template<
+	SimRlp::Internal::Endian _InEndian,
+	SimRlp::Internal::Endian _PlatformEndian = SimRlp::Internal::Endian::native>
+struct RawToPrimitive; // struct RawToPrimitive
+
+
+template<>
+struct RawToPrimitive<
+	SimRlp::Internal::Endian::little,
+	SimRlp::Internal::Endian::little>
+{
+	template<typename _IntType>
+	static _IntType ToInt(const void* src, size_t srcSize)
+	{
+		if (srcSize != sizeof(_IntType))
+		{
+			throw ParseError(
+				"The given raw data size doesn't match the size of "
+				"the targeting type");
+		}
+
+		_IntType retVal;
+		std::memcpy(&retVal, src, sizeof(_IntType));
+
+		return retVal;
+	}
+}; // struct RawToPrimitive
 
 } // namespace Internal
 

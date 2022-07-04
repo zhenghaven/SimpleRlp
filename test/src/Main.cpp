@@ -12,7 +12,7 @@ namespace SimpleRlp_Test
 
 int main(int argc, char** argv)
 {
-	constexpr size_t EXPECTED_NUM_OF_TEST_FILE = 8;
+	constexpr size_t EXPECTED_NUM_OF_TEST_FILE = 12;
 
 	std::cout << "===== SimpleRlp test program =====" << std::endl;
 	std::cout << std::endl;

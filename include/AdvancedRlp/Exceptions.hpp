@@ -67,11 +67,12 @@ private: // static members:
 
 	static std::string ConErrorMsg(uint8_t catId)
 	{
-		std::string errMsg = "Unkown CAT ID ";
+		std::string catIdHex;
 		Internal::SimRlp::Internal::Obj::Internal::
 			ByteToString<std::string::value_type>(
-				std::back_inserter(errMsg), catId);
-		return errMsg;
+				std::back_inserter(catIdHex), catId);
+
+		return "Unkown CAT ID - " + catIdHex;
 	}
 
 }; // class UnknownCatId
@@ -82,14 +83,6 @@ private: // static members:
  */
 class ParseError : public Exception
 {
-public:
-
-	static std::string ConErrorMsg(
-		const std::string& issue, size_t bytePos)
-	{
-		return ("Parse error - " + issue) +
-			" (byte @ " + std::to_string(bytePos + 1) + ")";
-	}
 
 public:
 
@@ -127,6 +120,15 @@ public:
 		return m_bytePos;
 	}
 
+private: // static members:
+
+	static std::string ConErrorMsg(
+		const std::string& issue, size_t bytePos)
+	{
+		return ("Parse error - " + issue) +
+			" (byte @ " + std::to_string(bytePos + 1) + ")";
+	}
+
 private:
 
 	size_t m_bytePos;
@@ -135,7 +137,7 @@ private:
 
 /**
  * @brief This exception is thrown when error occurred during writing object to
- *        RLP bytes
+ *        AdvRLP bytes
  */
 class SerializeError : public Exception
 {
@@ -159,15 +161,17 @@ public:
 
 /**
  * @brief This exception is thrown when error occurred during writing object to
- *        RLP bytes
+ *        AdvRLP bytes
  */
 class SerializeTypeError : public SerializeError
 {
 
 public:
 
-	explicit SerializeTypeError(const std::string& typeName) :
-		SerializeError("Cannot serialize type " + typeName + " into RLP")
+	SerializeTypeError(
+		const std::string& typeName,
+		const std::string& writerName) :
+		SerializeError(ConErrorMsg(typeName, writerName))
 	{}
 
 	// LCOV_EXCL_START
@@ -177,6 +181,19 @@ public:
 	 */
 	virtual ~SerializeTypeError() = default;
 	// LCOV_EXCL_STOP
+
+private: // static members:
+
+	static std::string ConErrorMsg(
+		const std::string& typeName,
+		const std::string& writerName)
+	{
+		return (
+			"Cannot serialize type " +
+			typeName +
+			" into AdvRLP with " +
+			writerName);
+	}
 
 }; // class SerializeTypeError
 

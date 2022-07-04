@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <AdvancedRlp/CatId.hpp>
+#include <AdvancedRlp/WriterUtils.hpp>
 
 #ifndef ADVANCEDRLP_CUSTOMIZED_NAMESPACE
 using namespace AdvancedRlp;
@@ -59,5 +60,33 @@ GTEST_TEST(TestAdvRlpMisc, SerializeCatId)
 GTEST_TEST(TestAdvRlpMisc, UnknownCatId)
 {
 	auto exp = UnknownCatId(0xFFU);
-	EXPECT_EQ(exp.what(), std::string("Unkown CAT ID \\xFF"));
+	EXPECT_EQ(exp.what(), std::string("Unkown CAT ID - \\xFF"));
+}
+
+GTEST_TEST(TestAdvRlpMisc, PrimitiveToRaw)
+{
+	// size ok
+	{
+		std::vector<uint8_t> ctn;
+		uint32_t testVal = 0x12345678U;
+		ctn.resize(sizeof(testVal));
+
+		Internal::PrimitiveToRaw<Internal::SimRlp::Internal::Endian::little>::
+			FromInt(ctn.data(), ctn.size(), testVal);
+
+		EXPECT_EQ(ctn, std::vector<uint8_t>({ 0x78U, 0x56U, 0x34U, 0x12U, }));
+	}
+
+	// size not matching
+	{
+		std::vector<uint8_t> ctn;
+		uint32_t testVal = 0x12345678U;
+		ctn.resize(sizeof(testVal) + 1);
+
+		auto testProg = [&]() {
+			Internal::PrimitiveToRaw<Internal::SimRlp::Internal::Endian::little>::
+				FromInt(ctn.data(), ctn.size(), testVal);
+		};
+		EXPECT_THROW(testProg(), SerializeError);
+	}
 }

@@ -47,10 +47,10 @@ inline void PreCheckCatBytes(size_t pos, const _ListObjType& l)
 
 template<
 	typename _ListObjType,
-	typename _RlpParser>
+	typename _BytesObjType>
 struct TransformCatBytes
 {
-	using RetType = typename _RlpParser::RetType;
+	using RetType = _BytesObjType;
 
 
 	RetType operator()(size_t pos, _ListObjType&& l)
@@ -59,10 +59,9 @@ struct TransformCatBytes
 
 		const auto& rawDataObj = l[1].AsBytes();
 
-		Internal::SimRlp::InputContainerType regularRlp(
-			rawDataObj.data(), rawDataObj.data() + rawDataObj.size());
-
-		return _RlpParser().Parse(regularRlp);
+		return RetType(
+			rawDataObj.data(),
+			rawDataObj.data() + rawDataObj.size());
 	}
 }; // struct TransformCatBytes
 
@@ -74,7 +73,7 @@ using CatBytesParserT = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::ListObjType,
 	TransformCatBytes<
 		Internal::SimRlp::ListObjType,
-		_InnerRlpParser>,
+		Internal::SimRlp::BytesObjType>,
 	Internal::SimRlp::BytesParser,
 	Internal::SimRlp::SelfParserPlaceholder>;
 
@@ -88,19 +87,19 @@ using CatBytesParser = CatBytesParserT<Internal::SimRlp::BytesParser>;
 
 
 template<
+	typename _InObjType,
 	typename _OutCtnType,
 	typename _RlpBytesWriter>
 struct CatBytesWriterImpl
 {
-	using Self = CatBytesWriterImpl<_OutCtnType, _RlpBytesWriter>;
+	using Self = CatBytesWriterImpl<_InObjType, _OutCtnType, _RlpBytesWriter>;
 
 	using RlpBytesWriter  = _RlpBytesWriter;
 
 	using Concatenator = Internal::SimRlp::OutContainerConcat<_OutCtnType>;
 
 
-	template<typename _BytesObjType>
-	inline static _OutCtnType Write(const _BytesObjType& inBytes)
+	inline static _OutCtnType Write(const _InObjType& inBytes)
 	{
 		Concatenator ccntr;
 		_OutCtnType outBytes;
@@ -110,11 +109,6 @@ struct CatBytesWriterImpl
 
 		// 2.raw data
 		auto rawData = RlpBytesWriter::Write(inBytes);
-		rawData = Internal::SimRlp::
-			SerializeBytes(
-				Internal::SimRlp::RlpEncTypeCat::Bytes,
-				rawData,
-				ccntr);
 		ccntr(outBytes, rawData);
 
 		// 3.build RLP list
@@ -130,6 +124,7 @@ struct CatBytesWriterImpl
 
 using CatBytesWriter =
 	CatBytesWriterImpl<
+		Internal::SimRlp::Internal::Obj::BytesBaseObj,
 		Internal::SimRlp::OutputContainerType,
 		Internal::SimRlp::WriterBytesImpl<
 			Internal::SimRlp::OutputContainerType> >;
