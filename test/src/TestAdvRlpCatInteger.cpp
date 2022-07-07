@@ -910,7 +910,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Generic)
 				EXPECT_EQ(
 					obj.AsRealNum().GetNumType(),
 					SimpleObjects::RealNumType::Int8);
-				EXPECT_EQ(obj.AsCppInt8(), 0x12U);
+				EXPECT_EQ(obj.AsCppInt8(), 0x12);
 			}
 		);
 	}
@@ -944,7 +944,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Generic)
 				EXPECT_EQ(
 					obj.AsRealNum().GetNumType(),
 					SimpleObjects::RealNumType::Int16);
-				EXPECT_EQ(obj.AsCppInt32(), 0x3412U);
+				EXPECT_EQ(obj.AsCppInt32(), 0x3412);
 			}
 		);
 	}
@@ -978,7 +978,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Generic)
 				EXPECT_EQ(
 					obj.AsRealNum().GetNumType(),
 					SimpleObjects::RealNumType::Int32);
-				EXPECT_EQ(obj.AsCppInt32(), 0x78563412U);
+				EXPECT_EQ(obj.AsCppInt32(), 0x78563412);
 			}
 		);
 	}
