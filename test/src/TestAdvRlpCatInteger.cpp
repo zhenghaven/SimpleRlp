@@ -138,10 +138,7 @@ struct SpecTransformTestWrongType<uint64_t, _Transform>
 
 GTEST_TEST(TestAdvRlpCatInteger, Transform_Int8)
 {
-	using TF =
-		TransformCatInteger<
-			SimpleObjects::List,
-			SpecificIntConverter<int8_t> >;
+	using TF = TransformCatIntegerT<SpecificIntConverter<int8_t> >;
 
 	// Correct parsing - positive
 	{
@@ -177,7 +174,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int8)
 	SpecTransformTestWrongType<int64_t, TF>()();
 	SpecTransformTestWrongType<uint64_t, TF>()();
 
-	// In correct raw data size
+	// Incorrect raw data size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, 0x10U, }),
@@ -187,7 +184,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int8)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct integer value exceeds range
+	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, 0x10U, }),
@@ -199,21 +196,21 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int8)
 
 	auto zeroRawData = SimpleObjects::Bytes({ 0x00U, });
 
-	// In correct width byte
+	// Incorrect width byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0xFFU, 0x10U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct signedness byte
+	// Incorrect signedness byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, 0xFFU, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct num of items in list
+	// Incorrect num of items in list
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, 0x10U, }), zeroRawData,
@@ -221,14 +218,14 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int8)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct specs size
+	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct cat ID
+	// Incorrect cat ID
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x00U, 0x00U, 0x10U, }), zeroRawData, };
@@ -238,10 +235,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int8)
 
 GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt8)
 {
-	using TF =
-		TransformCatInteger<
-			SimpleObjects::List,
-			SpecificIntConverter<uint8_t> >;
+	using TF = TransformCatIntegerT<SpecificIntConverter<uint8_t> >;
 
 	// Correct parsing
 	{
@@ -264,7 +258,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt8)
 	SpecTransformTestWrongType<int64_t, TF>()();
 	SpecTransformTestWrongType<uint64_t, TF>()();
 
-	// In correct raw data size
+	// Incorrect raw data size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, 0x00U, }),
@@ -274,7 +268,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt8)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct integer value exceeds range
+	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, 0x10U, }),
@@ -286,21 +280,21 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt8)
 
 	auto zeroRawData = SimpleObjects::Bytes({ 0x00U, });
 
-	// In correct width byte
+	// Incorrect width byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0xFFU, 0x00U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct signedness byte
+	// Incorrect signedness byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, 0xFFU, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct num of items in list
+	// Incorrect num of items in list
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, 0x00U, }), zeroRawData,
@@ -308,14 +302,14 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt8)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct specs size
+	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct cat ID
+	// Incorrect cat ID
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x00U, 0x00U, 0x00U, }), zeroRawData, };
@@ -325,10 +319,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt8)
 
 GTEST_TEST(TestAdvRlpCatInteger, Transform_Int16)
 {
-	using TF =
-		TransformCatInteger<
-			SimpleObjects::List,
-			SpecificIntConverter<int16_t> >;
+	using TF = TransformCatIntegerT<SpecificIntConverter<int16_t> >;
 
 	// Correct parsing - positive
 	{
@@ -364,7 +355,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int16)
 	SpecTransformTestWrongType<int64_t, TF>()();
 	SpecTransformTestWrongType<uint64_t, TF>()();
 
-	// In correct raw data size
+	// Incorrect raw data size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, 0x10U, }),
@@ -374,7 +365,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int16)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct integer value exceeds range
+	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, 0x10U, }),
@@ -386,21 +377,21 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int16)
 
 	auto zeroRawData = SimpleObjects::Bytes({ 0x00U, 0x00U, });
 
-	// In correct width byte
+	// Incorrect width byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0xFFU, 0x10U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct signedness byte
+	// Incorrect signedness byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, 0xFFU, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct num of items in list
+	// Incorrect num of items in list
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, 0x10U, }), zeroRawData,
@@ -408,14 +399,14 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int16)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct specs size
+	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct cat ID
+	// Incorrect cat ID
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x00U, 0x01U, 0x10U, }), zeroRawData, };
@@ -425,10 +416,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int16)
 
 GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt16)
 {
-	using TF =
-		TransformCatInteger<
-			SimpleObjects::List,
-			SpecificIntConverter<uint16_t> >;
+	using TF = TransformCatIntegerT<SpecificIntConverter<uint16_t> >;
 
 	// Correct parsing
 	{
@@ -451,7 +439,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt16)
 	SpecTransformTestWrongType<int64_t, TF>()();
 	SpecTransformTestWrongType<uint64_t, TF>()();
 
-	// In correct raw data size
+	// Incorrect raw data size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, 0x00U, }),
@@ -461,7 +449,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt16)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct integer value exceeds range
+	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, 0x10U, }),
@@ -473,21 +461,21 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt16)
 
 	auto zeroRawData = SimpleObjects::Bytes({ 0x00U, 0x00U, });
 
-	// In correct width byte
+	// Incorrect width byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0xFFU, 0x00U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct signedness byte
+	// Incorrect signedness byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, 0xFFU, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct num of items in list
+	// Incorrect num of items in list
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, 0x00U, }), zeroRawData,
@@ -495,14 +483,14 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt16)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct specs size
+	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct cat ID
+	// Incorrect cat ID
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x00U, 0x01U, 0x00U, }), zeroRawData, };
@@ -512,10 +500,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt16)
 
 GTEST_TEST(TestAdvRlpCatInteger, Transform_Int32)
 {
-	using TF =
-		TransformCatInteger<
-			SimpleObjects::List,
-			SpecificIntConverter<int32_t> >;
+	using TF = TransformCatIntegerT<SpecificIntConverter<int32_t> >;
 
 	// Correct parsing - positive
 	{
@@ -551,7 +536,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int32)
 	SpecTransformTestWrongType<int64_t, TF>()();
 	SpecTransformTestWrongType<uint64_t, TF>()();
 
-	// In correct raw data size
+	// Incorrect raw data size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, 0x10U, }),
@@ -561,7 +546,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int32)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct integer value exceeds range
+	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, 0x10U, }),
@@ -573,21 +558,21 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int32)
 
 	auto zeroRawData = SimpleObjects::Bytes({ 0x00U, 0x00U, 0x00U, 0x00U, });
 
-	// In correct width byte
+	// Incorrect width byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0xFFU, 0x10U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct signedness byte
+	// Incorrect signedness byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, 0xFFU, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct num of items in list
+	// Incorrect num of items in list
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, 0x10U, }), zeroRawData,
@@ -595,14 +580,14 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int32)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct specs size
+	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct cat ID
+	// Incorrect cat ID
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x00U, 0x02U, 0x10U, }), zeroRawData, };
@@ -612,10 +597,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int32)
 
 GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt32)
 {
-	using TF =
-		TransformCatInteger<
-			SimpleObjects::List,
-			SpecificIntConverter<uint32_t> >;
+	using TF = TransformCatIntegerT<SpecificIntConverter<uint32_t> >;
 
 	// Correct parsing
 	{
@@ -638,7 +620,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt32)
 	SpecTransformTestWrongType<int64_t, TF>()();
 	SpecTransformTestWrongType<uint64_t, TF>()();
 
-	// In correct raw data size
+	// Incorrect raw data size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, 0x00U, }),
@@ -648,7 +630,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt32)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct integer value exceeds range
+	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, 0x10U, }),
@@ -660,21 +642,21 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt32)
 
 	auto zeroRawData = SimpleObjects::Bytes({ 0x00U, 0x00U, 0x00U, 0x00U, });
 
-	// In correct width byte
+	// Incorrect width byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0xFFU, 0x00U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct signedness byte
+	// Incorrect signedness byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, 0xFFU, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct num of items in list
+	// Incorrect num of items in list
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, 0x00U, }), zeroRawData,
@@ -682,14 +664,14 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt32)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct specs size
+	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct cat ID
+	// Incorrect cat ID
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x00U, 0x02U, 0x00U, }), zeroRawData, };
@@ -699,10 +681,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt32)
 
 GTEST_TEST(TestAdvRlpCatInteger, Transform_Int64)
 {
-	using TF =
-		TransformCatInteger<
-			SimpleObjects::List,
-			SpecificIntConverter<int64_t> >;
+	using TF = TransformCatIntegerT<SpecificIntConverter<int64_t> >;
 
 	// Correct parsing - positive
 	{
@@ -740,7 +719,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int64)
 	SpecTransformTestWrongType<uint32_t, TF>()();
 	SpecTransformTestWrongType<uint64_t, TF>()();
 
-	// In correct raw data size
+	// Incorrect raw data size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, 0x10U, }),
@@ -751,7 +730,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int64)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct integer value exceeds range
+	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, 0x10U, }),
@@ -765,21 +744,21 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int64)
 	auto zeroRawData = SimpleObjects::Bytes({ 0x00U, 0x00U, 0x00U, 0x00U,
 		0x00U, 0x00U, 0x00U, 0x00U, });
 
-	// In correct width byte
+	// Incorrect width byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0xFFU, 0x10U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct signedness byte
+	// Incorrect signedness byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, 0xFFU, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct num of items in list
+	// Incorrect num of items in list
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, 0x10U, }), zeroRawData,
@@ -787,14 +766,14 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int64)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct specs size
+	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct cat ID
+	// Incorrect cat ID
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x00U, 0x03U, 0x10U, }), zeroRawData, };
@@ -804,10 +783,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int64)
 
 GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt64)
 {
-	using TF =
-		TransformCatInteger<
-			SimpleObjects::List,
-			SpecificIntConverter<uint64_t> >;
+	using TF = TransformCatIntegerT<SpecificIntConverter<uint64_t> >;
 
 	// Correct parsing
 	{
@@ -831,7 +807,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt64)
 	SpecTransformTestWrongType<uint32_t, TF>()();
 	SpecTransformTestWrongType<int64_t, TF>()();
 
-	// In correct raw data size
+	// Incorrect raw data size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, 0x00U, }),
@@ -841,7 +817,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt64)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct integer value exceeds range
+	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, 0x10U, }),
@@ -854,21 +830,21 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt64)
 	auto zeroRawData = SimpleObjects::Bytes({ 0x00U, 0x00U, 0x00U, 0x00U,
 		0x00U, 0x00U, 0x00U, 0x00U, });
 
-	// In correct width byte
+	// Incorrect width byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0xFFU, 0x00U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct signedness byte
+	// Incorrect signedness byte
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, 0xFFU, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct num of items in list
+	// Incorrect num of items in list
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, 0x00U, }), zeroRawData,
@@ -876,14 +852,14 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt64)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct specs size
+	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x03U, }), zeroRawData, };
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
-	// In correct cat ID
+	// Incorrect cat ID
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x00U, 0x03U, 0x00U, }), zeroRawData, };
@@ -893,10 +869,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt64)
 
 GTEST_TEST(TestAdvRlpCatInteger, Transform_Generic)
 {
-	using TF =
-		TransformCatInteger<
-			SimpleObjects::List,
-			GenericIntConverter>;
+	using TF = TransformCatInteger;
 
 	// int8_t
 	{

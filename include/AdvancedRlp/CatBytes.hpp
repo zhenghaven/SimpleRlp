@@ -48,7 +48,7 @@ inline void PreCheckCatBytes(size_t pos, const _ListObjType& l)
 template<
 	typename _ListObjType,
 	typename _BytesObjType>
-struct TransformCatBytes
+struct TransformCatBytesImpl
 {
 	using RetType = _BytesObjType;
 
@@ -63,7 +63,12 @@ struct TransformCatBytes
 			rawDataObj.data(),
 			rawDataObj.data() + rawDataObj.size());
 	}
-}; // struct TransformCatBytes
+}; // struct TransformCatBytesImpl
+
+
+using TransformCatBytes = TransformCatBytesImpl<
+	Internal::SimRlp::ListObjType,
+	Internal::SimRlp::BytesObjType>;
 
 
 template<typename _InnerRlpParser>
@@ -71,9 +76,7 @@ using CatBytesParserT = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::InputContainerType,
 	Internal::SimRlp::ByteValType,
 	Internal::SimRlp::ListObjType,
-	TransformCatBytes<
-		Internal::SimRlp::ListObjType,
-		Internal::SimRlp::BytesObjType>,
+	TransformCatBytes,
 	Internal::SimRlp::BytesParser,
 	Internal::SimRlp::SelfParserPlaceholder>;
 

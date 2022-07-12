@@ -111,7 +111,7 @@ struct SolveSignedness
 template<
 	typename _ListObjType,
 	typename _ValToObjConverter>
-struct TransformCatInteger
+struct TransformCatIntegerImpl
 {
 	using RetType = typename _ValToObjConverter::RetType;
 
@@ -187,7 +187,7 @@ struct TransformCatInteger
 		}
 		}
 	}
-}; // struct TransformCatInteger
+}; // struct TransformCatIntegerImpl
 
 
 template<
@@ -353,15 +353,21 @@ struct GenericIntConverter
 
 
 template<typename _Converter>
+using TransformCatIntegerT = TransformCatIntegerImpl<
+	Internal::SimRlp::ListObjType,
+	_Converter>;
+
+
+template<typename _Converter>
 using CatIntegerParserT = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::InputContainerType,
 	Internal::SimRlp::ByteValType,
 	Internal::SimRlp::ListObjType,
-	TransformCatInteger<
-		Internal::SimRlp::ListObjType,
-		_Converter>,
+	TransformCatIntegerT<_Converter>,
 	Internal::SimRlp::BytesParser,
 	Internal::SimRlp::SelfParserPlaceholder>;
+
+using TransformCatInteger = TransformCatIntegerT<GenericIntConverter>;
 
 using CatIntegerParser = CatIntegerParserT<GenericIntConverter>;
 

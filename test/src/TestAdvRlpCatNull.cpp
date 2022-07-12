@@ -27,10 +27,7 @@ GTEST_TEST(TestAdvRlpCatNull, CountTestFile)
 
 GTEST_TEST(TestAdvRlpCatNull, Transform)
 {
-	using TF =
-		TransformCatNull<
-			SimpleObjects::List,
-			SimpleObjects::Null>;
+	using TF = TransformCatNull;
 
 	// Correct parsing
 	{
@@ -44,7 +41,7 @@ GTEST_TEST(TestAdvRlpCatNull, Transform)
 			SimpleObjects::Null());
 	}
 
-	// In correct num of items in list
+	// Incorrect num of items in list
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x01U, }),
@@ -56,7 +53,7 @@ GTEST_TEST(TestAdvRlpCatNull, Transform)
 			ParseError);
 	}
 
-	// In correct specs size
+	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x01U, 0x00U, }),
@@ -67,7 +64,7 @@ GTEST_TEST(TestAdvRlpCatNull, Transform)
 			ParseError);
 	}
 
-	// In correct cat ID
+	// Incorrect cat ID
 	{
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x00U, }),

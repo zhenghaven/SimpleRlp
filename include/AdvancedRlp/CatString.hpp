@@ -80,7 +80,7 @@ namespace Internal
 template<
 	typename _ListObjType,
 	typename _StrObjType>
-struct TransformCatString
+struct TransformCatStringImpl
 {
 	using RetType = _StrObjType;
 
@@ -117,18 +117,22 @@ struct TransformCatString
 		}
 		}
 	}
-}; // struct TransformCatString
+}; // struct TransformCatStringImpl
+
+
+using TransformCatString = TransformCatStringImpl<
+		Internal::SimRlp::ListObjType,
+		Internal::SimRlp::Internal::Obj::String>;
 
 
 using CatStringParser = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::InputContainerType,
 	Internal::SimRlp::ByteValType,
 	Internal::SimRlp::ListObjType,
-	TransformCatString<
-		Internal::SimRlp::ListObjType,
-		Internal::SimRlp::Internal::Obj::String>,
+	TransformCatString,
 	Internal::SimRlp::BytesParser,
 	Internal::SimRlp::SelfParserPlaceholder>;
+
 
 // ====================
 // Writers

@@ -61,7 +61,7 @@ template<
 	bool _IsTrue,
 	typename _ListObjType,
 	typename _BoolObjType>
-struct TransformCatBoolean
+struct TransformCatBooleanImpl
 {
 	using RetType = _BoolObjType;
 
@@ -72,17 +72,26 @@ struct TransformCatBoolean
 
 		return RetType(_IsTrue);
 	}
-}; // struct TransformCatBoolean
+}; // struct TransformCatBooleanImpl
+
+
+using TransformCatFalse = TransformCatBooleanImpl<
+	false,
+	Internal::SimRlp::ListObjType,
+	Internal::SimRlp::Internal::Obj::Bool>;
+
+
+using TransformCatTrue = TransformCatBooleanImpl<
+	true,
+	Internal::SimRlp::ListObjType,
+	Internal::SimRlp::Internal::Obj::Bool>;
 
 
 using CatFalseParser = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::InputContainerType,
 	Internal::SimRlp::ByteValType,
 	Internal::SimRlp::ListObjType,
-	TransformCatBoolean<
-		false,
-		Internal::SimRlp::ListObjType,
-		Internal::SimRlp::Internal::Obj::Bool>,
+	TransformCatFalse,
 	Internal::SimRlp::BytesParser,
 	Internal::SimRlp::SelfParserPlaceholder>;
 
@@ -91,10 +100,7 @@ using CatTrueParser = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::InputContainerType,
 	Internal::SimRlp::ByteValType,
 	Internal::SimRlp::ListObjType,
-	TransformCatBoolean<
-		true,
-		Internal::SimRlp::ListObjType,
-		Internal::SimRlp::Internal::Obj::Bool>,
+	TransformCatTrue,
 	Internal::SimRlp::BytesParser,
 	Internal::SimRlp::SelfParserPlaceholder>;
 

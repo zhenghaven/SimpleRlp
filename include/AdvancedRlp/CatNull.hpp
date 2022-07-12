@@ -47,7 +47,7 @@ inline void PreCheckCatNull(size_t pos, const _ListObjType& l)
 template<
 	typename _ListObjType,
 	typename _NullObjType>
-struct TransformCatNull
+struct TransformCatNullImpl
 {
 	using RetType = _NullObjType;
 
@@ -58,16 +58,19 @@ struct TransformCatNull
 
 		return RetType();
 	}
-}; // struct TransformCatNull
+}; // struct TransformCatNullImpl
+
+
+using TransformCatNull = TransformCatNullImpl<
+	Internal::SimRlp::ListObjType,
+	Internal::SimRlp::Internal::Obj::Null>;
 
 
 using CatNullParser = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::InputContainerType,
 	Internal::SimRlp::ByteValType,
 	Internal::SimRlp::ListObjType,
-	TransformCatNull<
-		Internal::SimRlp::ListObjType,
-		Internal::SimRlp::Internal::Obj::Null>,
+	TransformCatNull,
 	Internal::SimRlp::BytesParser,
 	Internal::SimRlp::SelfParserPlaceholder>;
 
