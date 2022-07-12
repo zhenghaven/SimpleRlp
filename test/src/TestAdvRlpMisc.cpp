@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <AdvancedRlp/CatId.hpp>
+#include <AdvancedRlp/ParserUtils.hpp>
 #include <AdvancedRlp/WriterUtils.hpp>
 
 #ifndef ADVANCEDRLP_CUSTOMIZED_NAMESPACE
@@ -24,6 +25,12 @@ GTEST_TEST(TestAdvRlpMisc, CountTestFile)
 	static auto tmp = ++SimpleRlp_Test::g_numOfTestFile;
 	(void)tmp;
 }
+
+
+// ==========
+// CAT ID
+// ==========
+
 
 GTEST_TEST(TestAdvRlpMisc, GetCatIdFromByte)
 {
@@ -62,6 +69,92 @@ GTEST_TEST(TestAdvRlpMisc, UnknownCatId)
 	auto exp = UnknownCatId(0xFFU);
 	EXPECT_EQ(exp.what(), std::string("Unkown CAT ID - \\xFF"));
 }
+
+
+// ==========
+// ParserUtils
+// ==========
+
+
+GTEST_TEST(TestAdvRlpMisc, CheckRlpListTypeSizeLe)
+{
+	{
+		auto testList = SimpleObjects::List({
+			SimpleObjects::Bytes(),
+			SimpleObjects::Bytes(),
+			SimpleObjects::Bytes(),
+			SimpleObjects::Bytes(),
+		});
+
+		auto testProg = [&](){
+			Internal::CheckRlpListTypeSizeLe(
+				"Test CAT", 0, testList,
+				std::pair<std::string, SimpleObjects::ObjCategory>("Bytes", SimpleObjects::ObjCategory::Bytes),
+				std::pair<std::string, SimpleObjects::ObjCategory>("Bytes", SimpleObjects::ObjCategory::Bytes)
+			);
+		};
+
+		EXPECT_NO_THROW(testProg());
+	}
+
+	{
+		auto testList = SimpleObjects::List({
+			SimpleObjects::Bytes(),
+			SimpleObjects::Bytes(),
+		});
+
+		auto testProg = [&](){
+			Internal::CheckRlpListTypeSizeLe(
+				"Test CAT", 0, testList,
+				std::pair<std::string, SimpleObjects::ObjCategory>("Bytes", SimpleObjects::ObjCategory::Bytes),
+				std::pair<std::string, SimpleObjects::ObjCategory>("Bytes", SimpleObjects::ObjCategory::Bytes)
+			);
+		};
+
+		EXPECT_NO_THROW(testProg());
+	}
+
+	{
+		auto testList = SimpleObjects::List({
+			SimpleObjects::Bytes(),
+		});
+
+		auto testProg = [&](){
+			Internal::CheckRlpListTypeSizeLe(
+				"Test CAT", 0, testList,
+				std::pair<std::string, SimpleObjects::ObjCategory>("Bytes", SimpleObjects::ObjCategory::Bytes),
+				std::pair<std::string, SimpleObjects::ObjCategory>("Bytes", SimpleObjects::ObjCategory::Bytes)
+			);
+		};
+
+		EXPECT_THROW(testProg(), ParseError);
+	}
+
+	{
+		auto testList = SimpleObjects::List({
+			SimpleObjects::Bytes(),
+			SimpleObjects::List(),
+			SimpleObjects::Bytes(),
+			SimpleObjects::Bytes(),
+		});
+
+		auto testProg = [&](){
+			Internal::CheckRlpListTypeSizeLe(
+				"Test CAT", 0, testList,
+				std::pair<std::string, SimpleObjects::ObjCategory>("Bytes", SimpleObjects::ObjCategory::Bytes),
+				std::pair<std::string, SimpleObjects::ObjCategory>("Bytes", SimpleObjects::ObjCategory::Bytes)
+			);
+		};
+
+		EXPECT_THROW(testProg(), ParseError);
+	}
+}
+
+
+// ==========
+// WriterUtils
+// ==========
+
 
 GTEST_TEST(TestAdvRlpMisc, PrimitiveToRaw)
 {

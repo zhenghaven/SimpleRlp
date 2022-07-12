@@ -28,10 +28,29 @@ inline void CheckRlpListSizeEq(
 	size_t expSize,
 	size_t recvSize)
 {
-	if (recvSize != expSize)
+	if (expSize != recvSize)
 	{
 		throw ParseError(
 			catName + " requires " +
+			std::to_string(expSize) +
+			" items in the RLP list, while " +
+			std::to_string(recvSize) +
+			" items were given",
+			pos
+		);
+	}
+}
+
+inline void CheckRlpListSizeLe(
+	const std::string& catName,
+	size_t pos,
+	size_t expSize,
+	size_t recvSize)
+{
+	if (expSize > recvSize) // or !(expSize <= recvSize)
+	{
+		throw ParseError(
+			catName + " requires at least " +
 			std::to_string(expSize) +
 			" items in the RLP list, while " +
 			std::to_string(recvSize) +
@@ -95,6 +114,23 @@ inline void CheckRlpListTypeSizeEq(
 {
 	static constexpr size_t expNumItem = sizeof...(_ObjCatType);
 	CheckRlpListSizeEq(catName, pos, expNumItem, l.size());
+
+	// check object categories
+	CheckObjCat(catName, pos, l, 0, objCat...);
+}
+
+
+template<
+	typename _RlpListType,
+	typename... _ObjCatType>
+inline void CheckRlpListTypeSizeLe(
+	const std::string& catName,
+	size_t pos,
+	const _RlpListType& l,
+	_ObjCatType ...objCat)
+{
+	static constexpr size_t expNumItem = sizeof...(_ObjCatType);
+	CheckRlpListSizeLe(catName, pos, expNumItem, l.size());
 
 	// check object categories
 	CheckObjCat(catName, pos, l, 0, objCat...);
