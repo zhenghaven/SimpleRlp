@@ -65,29 +65,9 @@ public:
 			return _ByteTransformFunc()(rlpVal);
 			break;
 
-		case RlpEncodeType::BytesShort:
-			size = static_cast<size_t>(rlpVal);
-			break;
-
-		case RlpEncodeType::BytesLong:
-			{
-				size_t sizeSize = static_cast<size_t>(rlpVal);
-				Base::CheckByteLeft(byteLeft, sizeSize, ism.GetBytesCount());
-				size =
-					Internal::ParseSizeValue<Internal::Endian::native>::Parse(
-						sizeSize, ism.GetBytesCount(),
-						[&]() {
-							return ism.GetByteAndAdv();
-						}
-					);
-			}
-			break;
-
-		case RlpEncodeType::ListShort:
-		case RlpEncodeType::ListLong:
 		default:
-			throw ParseError("Expecting a byte string data",
-				ism.GetBytesCount());
+			size = Base::ProcRlpBytesHeader(ism, rlpType, rlpVal, byteLeft);
+			break;
 		}
 
 		Base::CheckByteLeft(byteLeft, size, ism.GetBytesCount());

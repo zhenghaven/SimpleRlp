@@ -94,34 +94,7 @@ public:
 	{
 		ObjType obj;
 
-		size_t size = 0;
-		switch (rlpType)
-		{
-		case RlpEncodeType::ListShort:
-			size = static_cast<size_t>(rlpVal);
-			break;
-
-		case RlpEncodeType::ListLong:
-			{
-				size_t sizeSize = static_cast<size_t>(rlpVal);
-				Base::CheckByteLeft(byteLeft, sizeSize, ism.GetBytesCount());
-				size =
-					Internal::ParseSizeValue<Internal::Endian::native>::Parse(
-						sizeSize, ism.GetBytesCount(),
-						[&]() {
-							return ism.GetByteAndAdv();
-						}
-					);
-			}
-			break;
-
-		case RlpEncodeType::Byte:
-		case RlpEncodeType::BytesShort:
-		case RlpEncodeType::BytesLong:
-		default:
-			throw ParseError("Expecting a list data",
-				ism.GetBytesCount());
-		}
+		size_t size = Base::ProcRlpListHeader(ism, rlpType, rlpVal, byteLeft);
 
 		Base::CheckByteLeft(byteLeft, size, ism.GetBytesCount());
 		while (size > 0)
