@@ -12,6 +12,7 @@
 #include "CatString.hpp"
 #include "CatArray.hpp"
 #include "CatDict.hpp"
+#include "CatStaticDict.hpp"
 #include "GenericTransform.hpp"
 #include "GenericWriter.hpp"
 
@@ -91,7 +92,7 @@ using GenericWriter =
 		CatStringWriter,
 		CatArrayWriterT,
 		CatDictWriterT,
-		CatDictWriterT,
+		CatStaticDictWriterT,
 		Internal::SimRlp::OutputContainerType>;
 
 

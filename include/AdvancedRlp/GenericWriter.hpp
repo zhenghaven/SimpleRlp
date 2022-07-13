@@ -120,6 +120,9 @@ struct GenericWriterImpl
 		case Obj::ObjCategory::Dict:
 			return DictWriter::Write(val.AsDict());
 
+		case Obj::ObjCategory::StaticDict:
+			return StaticDictWriter::Write(val.AsStaticDict());
+
 		default:
 			throw SerializeTypeError(val.GetCategoryName(), "GenericWriter");
 		}
