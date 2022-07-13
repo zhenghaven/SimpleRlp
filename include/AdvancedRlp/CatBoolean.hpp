@@ -74,13 +74,7 @@ using TransformCatFalse = TransformCatBoolean;
 using TransformCatTrue  = TransformCatBoolean;
 
 
-using CatBooleanParser = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
-	Internal::SimRlp::ByteValType,
-	Internal::SimRlp::ListObjType,
-	TransformCatBoolean,
-	Internal::SimRlp::BytesParser,
-	Internal::SimRlp::SelfParserPlaceholder>;
+using CatBooleanParser = PrimitiveParserBase<TransformCatBoolean>;
 
 using CatFalseParser = CatBooleanParser;
 using CatTrueParser = CatBooleanParser;

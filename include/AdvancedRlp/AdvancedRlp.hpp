@@ -42,30 +42,18 @@ using TransformGeneric = TransformGenericImpl<
 	Internal::SimRlp::Internal::Obj::Object>;
 
 
-using GenericParser = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
-	Internal::SimRlp::ByteValType,
-	Internal::SimRlp::ListObjType,
+using GenericParser = CompositeParserBase<
 	TransformGeneric,
-	Internal::SimRlp::BytesParser,
 	Internal::SimRlp::SelfParserPlaceholder>;
 
 
-using CatArrayParser = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
-	Internal::SimRlp::ByteValType,
-	Internal::SimRlp::ListObjType,
+using CatArrayParser = CompositeParserBase<
 	TransformCatArray,
-	Internal::SimRlp::BytesParser,
 	GenericParser>;
 
 
-using CatDictParser = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
-	Internal::SimRlp::ByteValType,
-	Internal::SimRlp::ListObjType,
+using CatDictParser = CompositeParserBase<
 	TransformCatDict,
-	Internal::SimRlp::BytesParser,
 	GenericParser>;
 
 

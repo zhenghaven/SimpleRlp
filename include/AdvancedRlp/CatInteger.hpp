@@ -359,13 +359,8 @@ using TransformCatIntegerT = TransformCatIntegerImpl<
 
 
 template<typename _Converter>
-using CatIntegerParserT = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
-	Internal::SimRlp::ByteValType,
-	Internal::SimRlp::ListObjType,
-	TransformCatIntegerT<_Converter>,
-	Internal::SimRlp::BytesParser,
-	Internal::SimRlp::SelfParserPlaceholder>;
+using CatIntegerParserT =
+	PrimitiveParserBase<TransformCatIntegerT<_Converter> >;
 
 using TransformCatInteger = TransformCatIntegerT<GenericIntConverter>;
 

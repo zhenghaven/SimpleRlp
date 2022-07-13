@@ -71,17 +71,7 @@ using TransformCatBytes = TransformCatBytesImpl<
 	Internal::SimRlp::BytesObjType>;
 
 
-template<typename _InnerRlpParser>
-using CatBytesParserT = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
-	Internal::SimRlp::ByteValType,
-	Internal::SimRlp::ListObjType,
-	TransformCatBytes,
-	Internal::SimRlp::BytesParser,
-	Internal::SimRlp::SelfParserPlaceholder>;
-
-
-using CatBytesParser = CatBytesParserT<Internal::SimRlp::BytesParser>;
+using CatBytesParser = PrimitiveParserBase<TransformCatBytes>;
 
 
 // ====================

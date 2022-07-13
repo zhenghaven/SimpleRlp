@@ -66,13 +66,7 @@ using TransformCatNull = TransformCatNullImpl<
 	Internal::SimRlp::Internal::Obj::Null>;
 
 
-using CatNullParser = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
-	Internal::SimRlp::ByteValType,
-	Internal::SimRlp::ListObjType,
-	TransformCatNull,
-	Internal::SimRlp::BytesParser,
-	Internal::SimRlp::SelfParserPlaceholder>;
+using CatNullParser = PrimitiveParserBase<TransformCatNull>;
 
 
 // ====================

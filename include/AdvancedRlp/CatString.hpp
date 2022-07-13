@@ -125,13 +125,7 @@ using TransformCatString = TransformCatStringImpl<
 		Internal::SimRlp::Internal::Obj::String>;
 
 
-using CatStringParser = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
-	Internal::SimRlp::ByteValType,
-	Internal::SimRlp::ListObjType,
-	TransformCatString,
-	Internal::SimRlp::BytesParser,
-	Internal::SimRlp::SelfParserPlaceholder>;
+using CatStringParser = PrimitiveParserBase<TransformCatString>;
 
 
 // ====================

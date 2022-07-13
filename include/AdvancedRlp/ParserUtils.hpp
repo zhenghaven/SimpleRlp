@@ -19,6 +19,27 @@ namespace ADVANCEDRLP_CUSTOMIZED_NAMESPACE
 #endif
 {
 
+
+template<typename _Transform>
+using PrimitiveParserBase = Internal::SimRlp::ListParserImpl<
+	Internal::SimRlp::InputContainerType,
+	Internal::SimRlp::ByteValType,
+	Internal::SimRlp::ListObjType,
+	_Transform,
+	Internal::SimRlp::BytesParser,
+	Internal::SimRlp::SelfParserPlaceholder>;
+
+
+template<typename _Transform, typename _InnerParser>
+using CompositeParserBase = Internal::SimRlp::ListParserImpl<
+	Internal::SimRlp::InputContainerType,
+	Internal::SimRlp::ByteValType,
+	Internal::SimRlp::ListObjType,
+	_Transform,
+	Internal::SimRlp::BytesParser,
+	_InnerParser>;
+
+
 namespace Internal
 {
 
