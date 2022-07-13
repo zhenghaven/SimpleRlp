@@ -126,7 +126,7 @@ static std::vector<uint8_t> GetExpectedAdvRlp()
 		});
 }
 
-static SimpleObjects::Object GetExpectedObj()
+static SimpleObjects::List GetExpectedObj()
 {
 	return SimpleObjects::List({
 		SimpleObjects::Bytes({ 0x00U, 0x01U, 0x02U, 0x03U, 0x04U, 0x05U, }),
@@ -151,12 +151,15 @@ GTEST_TEST(TestAdvRlpCatArray, Parser)
 	// Correct
 	{
 		auto input = GetExpectedAdvRlp();
-		SimpleObjects::Object expOut = GetExpectedObj();
+		auto expOut = GetExpectedObj();
 
-		auto actOut = GenericParser().Parse(input);
+		auto actOut = CatArrayParser().Parse(input);
 		EXPECT_EQ(expOut, actOut);
 	}
+}
 
+GTEST_TEST(TestAdvRlpCatArray, GenericParser)
+{
 	// Incorrect - unkown CAT ID
 	{
 		std::vector<uint8_t> input = {
@@ -187,7 +190,7 @@ GTEST_TEST(TestAdvRlpCatArray, Consistency)
 {
 	{
 		auto inputAdvRlp = GetExpectedAdvRlp();
-		auto decoded = GenericParser().Parse(inputAdvRlp);
+		auto decoded = CatArrayParser().Parse(inputAdvRlp);
 		auto encoded = GenericWriter::Write(decoded);
 
 		EXPECT_EQ(encoded, inputAdvRlp);

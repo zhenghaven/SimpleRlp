@@ -20,14 +20,12 @@ namespace ADVANCEDRLP_CUSTOMIZED_NAMESPACE
 // ====================
 
 
-template<bool _IsTrue, typename _ListObjType>
-inline void PreCheckCatBoolean(size_t pos, const _ListObjType& l)
+template<typename _ListObjType>
+inline bool PreCheckCatBoolean(size_t pos, const _ListObjType& l)
 {
 	using namespace Internal::SimRlp::Internal::Obj;
 	Internal::CheckRlpListTypeSizeEq(
-		_IsTrue ? "CAT True" : "CAT False",
-		pos,
-		l,
+		"CAT True/False", pos, l,
 		std::pair<std::string, ObjCategory>("Bytes", ObjCategory::Bytes)
 	);
 
@@ -35,30 +33,23 @@ inline void PreCheckCatBoolean(size_t pos, const _ListObjType& l)
 	if (specs.size() != 1)
 	{
 		throw ParseError(
-			_IsTrue ?
-				"CAT True's specs bytes should be exactly 1 byte" :
-				"CAT False's specs bytes should be exactly 1 byte",
+			"CAT True/False's specs bytes should be exactly 1 byte",
 			pos);
 	}
 
-	if ((_IsTrue && GetCatIdFromByte(specs[0]) == CatId::True) ||
-		(!_IsTrue && GetCatIdFromByte(specs[0]) == CatId::False))
-	{
-		return;
-	}
-	else
+	auto catId = GetCatIdFromByte(specs[0]);
+	if ((catId != CatId::True) && (catId != CatId::False))
 	{
 		throw ParseError(
-			_IsTrue ?
-				"The given RLP list is not in CAT True" :
-				"The given RLP list is not in CAT False",
+			"The given RLP list is not in CAT True/False",
 			pos);
 	}
+
+	return (catId == CatId::True);
 }
 
 
 template<
-	bool _IsTrue,
 	typename _ListObjType,
 	typename _BoolObjType>
 struct TransformCatBooleanImpl
@@ -68,41 +59,31 @@ struct TransformCatBooleanImpl
 
 	RetType operator()(size_t pos, _ListObjType&& l)
 	{
-		PreCheckCatBoolean<_IsTrue>(pos, l);
+		auto res = PreCheckCatBoolean(pos, l);
 
-		return RetType(_IsTrue);
+		return RetType(res);
 	}
 }; // struct TransformCatBooleanImpl
 
 
-using TransformCatFalse = TransformCatBooleanImpl<
-	false,
+using TransformCatBoolean = TransformCatBooleanImpl<
 	Internal::SimRlp::ListObjType,
 	Internal::SimRlp::Internal::Obj::Bool>;
 
-
-using TransformCatTrue = TransformCatBooleanImpl<
-	true,
-	Internal::SimRlp::ListObjType,
-	Internal::SimRlp::Internal::Obj::Bool>;
+using TransformCatFalse = TransformCatBoolean;
+using TransformCatTrue  = TransformCatBoolean;
 
 
-using CatFalseParser = Internal::SimRlp::ListParserImpl<
+using CatBooleanParser = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::InputContainerType,
 	Internal::SimRlp::ByteValType,
 	Internal::SimRlp::ListObjType,
-	TransformCatFalse,
+	TransformCatBoolean,
 	Internal::SimRlp::BytesParser,
 	Internal::SimRlp::SelfParserPlaceholder>;
 
-
-using CatTrueParser = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
-	Internal::SimRlp::ByteValType,
-	Internal::SimRlp::ListObjType,
-	TransformCatTrue,
-	Internal::SimRlp::BytesParser,
-	Internal::SimRlp::SelfParserPlaceholder>;
+using CatFalseParser = CatBooleanParser;
+using CatTrueParser = CatBooleanParser;
 
 
 // ====================

@@ -260,7 +260,7 @@ static std::vector<uint8_t> GetExpectedAdvRlp()
 		});
 }
 
-static SimpleObjects::Object GetExpectedObj()
+static SimpleObjects::Dict GetExpectedObj()
 {
 	return SimpleObjects::Dict({
 		std::make_pair(
@@ -311,21 +311,8 @@ GTEST_TEST(TestAdvRlpCatDict, Parser)
 		auto input = GetExpectedAdvRlp();
 		auto expOut = GetExpectedObj();
 
-		auto actOut = GenericParser().Parse(input);
+		auto actOut = CatDictParser().Parse(input);
 		EXPECT_EQ(expOut, actOut);
-	}
-
-	// Incorrect - unkown CAT ID
-	{
-		std::vector<uint8_t> input = {
-			0xC4U,
-				0x22U,
-				0xC2U,
-					0x81U, // CAT ID = 0xFF
-						0xFFU,
-		};
-
-		EXPECT_THROW(GenericParser().Parse(input), UnknownCatId);
 	}
 }
 
@@ -345,7 +332,7 @@ GTEST_TEST(TestAdvRlpCatDict, Consistency)
 {
 	{
 		auto inputAdvRlp = GetExpectedAdvRlp();
-		auto decoded = GenericParser().Parse(inputAdvRlp);
+		auto decoded = CatDictParser().Parse(inputAdvRlp);
 		auto encoded = GenericWriter::Write(decoded);
 
 		EXPECT_EQ(encoded, inputAdvRlp);

@@ -50,6 +50,24 @@ using GenericParser = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::SelfParserPlaceholder>;
 
 
+using CatArrayParser = Internal::SimRlp::ListParserImpl<
+	Internal::SimRlp::InputContainerType,
+	Internal::SimRlp::ByteValType,
+	Internal::SimRlp::ListObjType,
+	TransformCatArray,
+	Internal::SimRlp::BytesParser,
+	GenericParser>;
+
+
+using CatDictParser = Internal::SimRlp::ListParserImpl<
+	Internal::SimRlp::InputContainerType,
+	Internal::SimRlp::ByteValType,
+	Internal::SimRlp::ListObjType,
+	TransformCatDict,
+	Internal::SimRlp::BytesParser,
+	GenericParser>;
+
+
 // ====================
 // Writers
 // ====================
