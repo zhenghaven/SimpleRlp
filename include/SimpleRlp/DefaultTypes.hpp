@@ -9,6 +9,7 @@
 #include "ListParser.hpp"
 #include "GeneralParser.hpp"
 #include "StaticDictParser.hpp"
+#include "FailingParser.hpp"
 
 #include "Writer.hpp"
 
@@ -89,6 +90,19 @@ using StaticDictParserT = StaticDictParserImpl<
 	StaticDictPickRetType<_ParserTp, _StaticDictType>
 	>;
 
+using FailingParserBytes =
+	FailingParser<
+		InputContainerType,
+		ByteValType,
+		RlpEncTypeCat::Bytes,
+		BytesObjType>;
+
+using FailingParserList =
+	FailingParser<
+		InputContainerType,
+		ByteValType,
+		RlpEncTypeCat::List,
+		ListObjType>;
 
 //====================
 // Writer

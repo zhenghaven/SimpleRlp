@@ -184,6 +184,17 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int8)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
+	// Incorrect raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x04U, 0x00U, 0x10U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
+		};
+
+		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
+	}
+
 	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
@@ -263,6 +274,17 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt8)
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x00U, 0x00U, }),
 			SimpleObjects::Bytes({ }),
+		};
+
+		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
+	}
+
+	// Incorrect raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x04U, 0x00U, 0x00U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
 		};
 
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
@@ -365,6 +387,17 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int16)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
+	// Incorrect raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x04U, 0x01U, 0x10U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
+		};
+
+		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
+	}
+
 	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
@@ -444,6 +477,17 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt16)
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x01U, 0x00U, }),
 			SimpleObjects::Bytes({ 0x12U, }),
+		};
+
+		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
+	}
+
+	// Incorrect raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x04U, 0x01U, 0x00U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
 		};
 
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
@@ -546,6 +590,17 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int32)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
+	// Incorrect raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x04U, 0x02U, 0x10U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
+		};
+
+		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
+	}
+
 	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
@@ -625,6 +680,17 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt32)
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x04U, 0x02U, 0x00U, }),
 			SimpleObjects::Bytes({ 0x12U, 0x34U, 0x56U, }),
+		};
+
+		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
+	}
+
+	// Incorrect raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x04U, 0x02U, 0x00U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
 		};
 
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
@@ -730,6 +796,17 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_Int64)
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
 
+	// Incorrect raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x04U, 0x03U, 0x10U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
+		};
+
+		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
+	}
+
 	// Incorrect integer value exceeds range
 	{
 		SimpleObjects::List testList = {
@@ -813,6 +890,16 @@ GTEST_TEST(TestAdvRlpCatInteger, Transform_UInt64)
 			SimpleObjects::Bytes({ 0x04U, 0x03U, 0x00U, }),
 			SimpleObjects::Bytes({ 0x12U, 0x34U, 0x56U, 0x78U,
 				0x12U, 0x34U, 0x56U, }),
+		};
+		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
+	}
+
+	// Incorrect raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x04U, 0x03U, 0x00U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
 		};
 		EXPECT_THROW(TF()(0, std::move(testList)), ParseError);
 	}
@@ -1069,7 +1156,7 @@ GTEST_TEST(TestAdvRlpCatInteger, Parser)
 								0x12U, 0x34U, 0x56U, 0x78U,
 				}));
 		};
-		EXPECT_THROW(testProg(), ParseError);
+		EXPECT_THROW(testProg(), SimpleRlp::ParseError);
 	}
 
 	// Incorrect encoding - extra raw data is a long byte

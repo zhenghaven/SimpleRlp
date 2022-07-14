@@ -27,7 +27,7 @@ using PrimitiveParserBase = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::ListObjType,
 	_Transform,
 	Internal::SimRlp::BytesParser,
-	Internal::SimRlp::SelfParserPlaceholder>;
+	Internal::SimRlp::FailingParserList>;
 
 
 template<typename _Transform, typename _InnerParser>

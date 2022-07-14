@@ -56,6 +56,19 @@ GTEST_TEST(TestAdvRlpCatString, Transform)
 			ParseError);
 	}
 
+	// Incorrect raw data is in list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x08U, 0x00U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x20U, })}),
+		};
+
+		EXPECT_THROW(
+			TF()(0, std::move(testList)),
+			ParseError);
+	}
+
 	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
@@ -172,7 +185,7 @@ GTEST_TEST(TestAdvRlpCatString, Parser)
 							0x20U,
 				}));
 		};
-		EXPECT_THROW(testProg(), ParseError);
+		EXPECT_THROW(testProg(), SimpleRlp::ParseError);
 	}
 }
 

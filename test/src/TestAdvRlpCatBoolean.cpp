@@ -52,6 +52,19 @@ GTEST_TEST(TestAdvRlpCatBoolean, TransformFalse)
 			ParseError);
 	}
 
+	// Incorrect extra raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x02U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
+		};
+
+		EXPECT_THROW(
+			TF()(0, std::move(testList)),
+			ParseError);
+	}
+
 	// Incorrect specs size
 	{
 		SimpleObjects::List testList = {
@@ -96,6 +109,19 @@ GTEST_TEST(TestAdvRlpCatBoolean, TransformTrue)
 		SimpleObjects::List testList = {
 			SimpleObjects::Bytes({ 0x03U, }),
 			SimpleObjects::Bytes({ 0x00U, }),
+		};
+
+		EXPECT_THROW(
+			TF()(0, std::move(testList)),
+			ParseError);
+	}
+
+	// Incorrect extra raw data in a list
+	{
+		SimpleObjects::List testList = {
+			SimpleObjects::Bytes({ 0x03U, }),
+			SimpleObjects::List({
+				SimpleObjects::Bytes({ 0x00U, })}),
 		};
 
 		EXPECT_THROW(
@@ -166,7 +192,7 @@ GTEST_TEST(TestAdvRlpCatBoolean, ParserFalse)
 							0x00U,
 				}));
 		};
-		EXPECT_THROW(testProg(), ParseError);
+		EXPECT_THROW(testProg(), SimpleRlp::ParseError);
 	}
 
 	// Incorrect encoding - extra raw data is a long byte
@@ -229,7 +255,7 @@ GTEST_TEST(TestAdvRlpCatBoolean, ParserTrue)
 							0x00U,
 				}));
 		};
-		EXPECT_THROW(testProg(), ParseError);
+		EXPECT_THROW(testProg(), SimpleRlp::ParseError);
 	}
 
 	// Incorrect encoding - extra raw data is a long byte
