@@ -44,6 +44,27 @@ enum class RlpEncodeType
 namespace Internal
 {
 
+template<RlpEncTypeCat _Cat>
+struct RlpEncTypeCatName;
+
+template<>
+struct RlpEncTypeCatName<RlpEncTypeCat::Bytes>
+{
+	static const char* value()
+	{
+		return "Bytes";
+	}
+}; // struct RlpEncTypeCatName<RlpEncTypeCat::Bytes>
+
+template<>
+struct RlpEncTypeCatName<RlpEncTypeCat::List>
+{
+	static const char* value()
+	{
+		return "List";
+	}
+}; // struct RlpEncTypeCatName<RlpEncTypeCat::List>
+
 enum class Endian
 {
 #ifdef __cpp_lib_endian

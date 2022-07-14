@@ -9,6 +9,7 @@
 #include "ListParser.hpp"
 #include "GeneralParser.hpp"
 #include "StaticDictParser.hpp"
+#include "FailingParser.hpp"
 
 #include "Writer.hpp"
 
@@ -63,6 +64,17 @@ using GeneralParser =
 		ListParser,
 		RetObjType>;
 
+template<typename _ParserTp>
+using StaticDictAutoRetType = Internal::Obj::StaticDict<
+	typename Internal::DParserTuple2TupleCore<_ParserTp>::type>;
+
+template<typename _ParserTp, typename _RetType>
+using StaticDictPickRetType = typename std::conditional<
+		std::is_same<_RetType, AutoPlaceholder>::value,
+		StaticDictAutoRetType<_ParserTp>,
+		_RetType
+	>::type;
+
 template<
 	typename _ParserTp,
 	bool _AllowMissingItem,
@@ -75,14 +87,22 @@ using StaticDictParserT = StaticDictParserImpl<
 	GeneralParser,
 	_AllowMissingItem,
 	_AllowExtraItem,
-	typename std::conditional<
-			std::is_same<_StaticDictType, AutoPlaceholder>::value,
-			Internal::Obj::StaticDict<
-				typename Internal::DParserTuple2TupleCore<_ParserTp>::type>,
-			_StaticDictType
-		>::type
+	StaticDictPickRetType<_ParserTp, _StaticDictType>
 	>;
 
+using FailingParserBytes =
+	FailingParser<
+		InputContainerType,
+		ByteValType,
+		RlpEncTypeCat::Bytes,
+		BytesObjType>;
+
+using FailingParserList =
+	FailingParser<
+		InputContainerType,
+		ByteValType,
+		RlpEncTypeCat::List,
+		ListObjType>;
 
 //====================
 // Writer

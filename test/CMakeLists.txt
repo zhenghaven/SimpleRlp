@@ -74,7 +74,7 @@ target_compile_options(SimpleRlp_test
 	PRIVATE $<$<CONFIG:>:${DEBUG_OPTIONS}>
 			$<$<CONFIG:Debug>:${DEBUG_OPTIONS}>
 			$<$<CONFIG:Release>:${RELEASE_OPTIONS}>)
-target_link_libraries(SimpleRlp_test SimpleRlp SimpleObjects gtest)
+target_link_libraries(SimpleRlp_test SimpleRlp SimpleObjects SimpleUtf gtest)
 
 add_test(NAME SimpleRlp_test
 	COMMAND SimpleRlp_test)

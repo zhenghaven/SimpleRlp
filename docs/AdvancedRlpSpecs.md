@@ -35,7 +35,7 @@ the traditional RLP.
 |   CAT ID (Hex)    | CAT ID (Hex)|  Category Name  |       Short Description       |
 |-------------------|-------------|-----------------|-------------------------------|
 | **Primitive data types**                                                          |
-|[`0x00`](#cat-0x00)|`0b000 00000`|       RLP       | Regular RLP data              |
+|[`0x00`](#cat-0x00)|`0b000 00000`|      Bytes      | Bytes string                  |
 |[`0x01`](#cat-0x01)|`0b000 00001`|       Null      | Null/None                     |
 |[`0x02`](#cat-0x02)|`0b000 00010`|      False      | Boolean - false               |
 |[`0x03`](#cat-0x03)|`0b000 00011`|       True      | Boolean - true                |
@@ -50,8 +50,8 @@ the traditional RLP.
 ### CAT ID reasoning
 
 - All CAT ID has the pattern of `0b000 xxxxx` is given to the primitive types
-  - So it can support at most 32 different categories of primitive data types
-  - and up to 224 different categories of composite data types
+  - So it can support at most 32 different *categories* of primitive data types
+  - and up to 224 different *categories* of composite data types
 - Boolean value of true and false are given their on CAT ID so that they can be
   quickly de/serialized without the need for reading any extra data
 
@@ -62,19 +62,32 @@ the traditional RLP.
 
 <a id="cat-0x00"></a>
 
-### CAT-0x00.RLP
+### CAT-0x00.Bytes
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Raw Data                           |
-|-------------|-----------------|------------------------------------|
-|   `0x00`    |     None        | regular RLP encoded data in binary |
+| *CAT ID* + *Type Specs* Bytes | Raw Data                           |
+|-------------------------------|------------------------------------|
+| `0x00`                        | regular RLP encoded *bytes*        |
+
+#### Type Specs Definitions
+
+- None for this category
 
 #### Comments
 
 The data types supported by the regular RLP is still very useful to us,
-thus, we dedicated CAT ID `0x00` to indicate the encoded data is a
-regular RLP data.
+meanwhile, because of its limitation, we also introduced AdvancedRLP array
+that can hold various data types.
+
+However, supporting the regular RLP as one category in AdvancedRLP could be
+ambiguous:
+when the serializer receives an array/list of byte data, it can encode it
+using regular RLP list or using AdvancedRLP array.
+This breaks the rule of deterministic de-/serialization.
+
+To avoid this ambiguity, AdvancedRLP only using CAT ID `0x00` to support bytes
+data, and list/array-like data structure is supported by CAT ID `0x20`.
 
 
 [<p align='right'>Back to list of categories</p>](#categories-of-data-types)
@@ -85,9 +98,13 @@ regular RLP data.
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Raw Data                           |
-|-------------|-----------------|------------------------------------|
-|   `0x01`    |     None        | None                               |
+| *CAT ID* + *Type Specs* Bytes | Raw Data                           |
+|-------------------------------|------------------------------------|
+| `0x01`                        | None                               |
+
+#### Type Specs Definitions
+
+- None for this category
 
 #### Comments
 
@@ -102,9 +119,13 @@ regular RLP data.
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Raw Data                           |
-|-------------|-----------------|------------------------------------|
-|   `0x02`    |     None        | None                               |
+| *CAT ID* + *Type Specs* Bytes | Raw Data                           |
+|-------------------------------|------------------------------------|
+| `0x02`                        | None                               |
+
+#### Type Specs Definitions
+
+- None for this category
 
 
 [<p align='right'>Back to list of categories</p>](#categories-of-data-types)
@@ -115,9 +136,13 @@ regular RLP data.
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Raw Data                           |
-|-------------|-----------------|------------------------------------|
-|   `0x03`    |     None        | None                               |
+| *CAT ID* + *Type Specs* Bytes | Raw Data                           |
+|-------------------------------|------------------------------------|
+| `0x03`                        | None                               |
+
+#### Type Specs Definitions
+
+- None for this category
 
 
 [<p align='right'>Back to list of categories</p>](#categories-of-data-types)
@@ -128,11 +153,11 @@ regular RLP data.
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Raw Data                           |
-|-------------|-----------------|------------------------------------|
-|   `0x04`    | 2 Bytes         | Raw data of the integer            |
+| *CAT ID* + *Type Specs* Bytes | Raw Data                           |
+|-------------------------------|------------------------------------|
+| `0x04`, `0x??`, `0x??`        | Raw data of the integer            |
 
-#### Type spec bytes
+#### Type Specs Definitions
 
 | Offset<br>(in bytes) | Definition                    | Possible Data | Meaning        |
 |----------------------|-------------------------------|---------------|----------------|
@@ -156,11 +181,11 @@ regular RLP data.
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Raw Data                             |
-|-------------|-----------------|--------------------------------------|
-|   `0x05`    | 2 Bytes         | Biased Exponent & Normalized Mantisa |
+| *CAT ID* + *Type Specs* Bytes | Raw Data                             |
+|-------------------------------|--------------------------------------|
+| `0x05`, `0x??`, `0x??`        | Biased Exponent & Normalized Mantisa |
 
-#### Type spec bytes
+#### Type Specs Definitions
 
 | Offset<br>(in bytes) | Definition                    | Possible Data | Meaning        |
 |----------------------|-------------------------------|---------------|----------------|
@@ -191,20 +216,16 @@ regular RLP data.
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Raw Data                             |
-|-------------|-----------------|--------------------------------------|
-|   `0x08`    | 9 Byte          | Char string data                     |
+| *CAT ID* + *Type Specs* Bytes | Raw Data                             |
+|-------------------------------|--------------------------------------|
+| `0x08`, `0x??`                | Char string data                     |
 
-#### Type spec bytes
+#### Type Specs Definitions
 
 | Offset<br>(in bytes) | Definition                    | Possible Data | Meaning        |
 |----------------------|-------------------------------|---------------|----------------|
 | 0                    |The width of the char value;   | `0x00`        | 1 byte         |
 |                      |  in terms of 2^x              |               |                |
-| 1 - 8                |The length of the string;      | N/A           |                |
-|                      |  8 byte unsigned integer;     |               |                |
-|                      |  little-endian                |               |                |
-
 
 #### Additional requirement
 
@@ -215,7 +236,8 @@ regular RLP data.
 - Currently, we only support UTF-8
   - More UTF (e.g., UTF-16, UTF-32) encoding could be added in future
     when needed
-
+- Length of the string is depend on the size of the raw data bytes, which is
+  encoded as bytes in a regular RLP
 
 [<p align='right'>Back to list of categories</p>](#categories-of-data-types)
 
@@ -225,17 +247,18 @@ regular RLP data.
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Following Data                             |
-|-------------|-----------------|--------------------------------------------|
-|   `0x20`    | 8 Byte          | A sequence of primitive or composite data  |
+| *CAT ID* + *Type Specs* Bytes | Data                                       |
+|-------------------------------|--------------------------------------------|
+| `0x20`                        | A sequence of primitive or composite data  |
 
-#### Type spec bytes
+#### Type Specs Definitions
 
-| Offset<br>(in bytes) | Definition                      | Possible Data | Meaning  |
-|----------------------|---------------------------------|---------------|----------|
-| 0 - 8                |The number of items in the array;| N/A           |          |
-|                      |  8 byte unsigned integer;       |               |          |
-|                      |  little-endian                  |               |          |
+- None for this category
+
+#### Comments
+
+- The number of items in the array depends on the number of items in the
+  following data section
 
 
 [<p align='right'>Back to list of categories</p>](#categories-of-data-types)
@@ -246,27 +269,28 @@ regular RLP data.
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Following Data                             |
-|-------------|-----------------|--------------------------------------------|
-|   `0x22`    | 8 Byte          | A sequence of primitive or composite data  |
+| *CAT ID* + *Type Specs* Bytes | Data                                       |
+|-------------------------------|--------------------------------------------|
+| `0x22`                        | A sequence of primitive or composite data  |
 
-#### Type spec bytes
+#### Type Specs Definitions
 
-| Offset<br>(in bytes) | Definition                    | Possible Data | Meaning  |
-|----------------------|-------------------------------|---------------|----------|
-| 0 - 8                |The number of K-V pairs in the | N/A           |          |
-|                      |  dictionary;                  |               |          |
-|                      |  8 byte unsigned integer;     |               |          |
-|                      |  little-endian                |               |          |
+- None for this category
 
 #### Additional requirements
 
-- The keys must be hashable and `<` comparable
 - Each key must be unique in the dictionary
+- The keys must be hashable and `<` comparable
 - The K-V pairs must be ordered based on the key from min to max
-- The data after the *type spec bytes* in the *encoding layout* is having the
-  format of:
+- The data section following the *Type Specs* Bytes shown in the
+  *encoding layout* has the format in:
   - `key1`, `value1`, `key2`, `value2`, `key3`, `value3`, ...
+
+#### Comments
+
+- The number of pairs in the dictionary depends on the number of items in the
+  following data section
+  - The layout of keys and values in the data section is given above
 
 
 [<p align='right'>Back to list of categories</p>](#categories-of-data-types)
@@ -277,18 +301,13 @@ regular RLP data.
 
 #### Encoding layout
 
-| CAT ID Byte | Type Spec Bytes | Following Data                             |
-|-------------|-----------------|--------------------------------------------|
-|   `0x23`    | 8 Byte          | A sequence of primitive or composite data  |
+| *CAT ID* + *Type Specs* Bytes | Data                                       |
+|-------------------------------|--------------------------------------------|
+| `0x23`                        | A sequence of primitive or composite data  |
 
-#### Type spec bytes
+#### Type Specs Definitions
 
-| Offset<br>(in bytes) | Definition                 | Possible Data | Meaning  |
-|----------------------|----------------------------|---------------|----------|
-| 0 - 8                |The number of values in the | N/A           |          |
-|                      |  dictionary;               |               |          |
-|                      |  8 byte unsigned integer;  |               |          |
-|                      |  little-endian             |               |          |
+- None for this category
 
 #### Additional requirements
 
@@ -297,10 +316,9 @@ regular RLP data.
   - This is very similar to the Ethereum header, where the developers know the
     *ParentHash* is in the first place and its data type is a SHA-3 hash,
     and *sha3Uncle* is in the second place and its data type is a SHA-3 hash,
-    etc.
+    and so on.
   - Thus, in the serialized data, we can omit their "key" values, and assume
-    the deserializing program has them hardcoded
-  - And their order is also hardcoded by the program
-- The data after the *type spec bytes* in the *encoding layout* is having the
-  format of:
+    the deserializing program has their name and order hardcoded
+- The data section following the *Type Specs* Bytes shown in the
+  *encoding layout* has the format in:
   - `value1`, `value2`, `value3`, ...

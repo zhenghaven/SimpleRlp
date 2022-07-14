@@ -48,7 +48,7 @@ public: // static members:
 
 public:
 
-	using Base::StaticDictImpl;
+	using Base::Base;
 
 	SimpleObjects::Bytes& get_Key1_1()
 	{
@@ -97,6 +97,10 @@ using TestStaticDict1Parser = StaticDictParserT<
 	false,
 	TestStaticDict1>;
 
+
+
+
+
 using TestStaticDict2Tp = std::tuple<
 	std::pair<SimpleObjects::StrKey<SIMOBJ_KSTR("Key2_1")>,
 		SimpleObjects::Bytes>,
@@ -116,7 +120,7 @@ public: // static members:
 
 public:
 
-	using Base::StaticDictImpl;
+	using Base::Base;
 
 	SimpleObjects::Bytes& get_Key2_1()
 	{

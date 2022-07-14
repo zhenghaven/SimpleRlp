@@ -22,8 +22,10 @@ struct TransformPassthrough
 {
 	using RetType = _T;
 
-	_T operator()(_T&& v)
+	_T operator()(size_t pos, _T&& v)
 	{
+		(void)pos;
+
 		return std::forward<_T>(v);
 	}
 }; // struct TransformPassthrough
@@ -129,6 +131,85 @@ protected:
 				pos);
 		}
 		byteLeft -= byteNeeded;
+	}
+
+	static size_t ProcRlpListHeader(
+		InputStateMachineIf<InputByteType>& ism,
+		RlpEncodeType rlpType,
+		InputByteType rlpVal,
+		size_t& byteLeft)
+	{
+		size_t size = 0;
+		switch (rlpType)
+		{
+		case RlpEncodeType::ListShort:
+			size = static_cast<size_t>(rlpVal);
+			break;
+
+		case RlpEncodeType::ListLong:
+			{
+				size_t sizeSize = static_cast<size_t>(rlpVal);
+				CheckByteLeft(byteLeft, sizeSize, ism.GetBytesCount());
+				size =
+					Internal::ParseSizeValue<Internal::Endian::native>::Parse(
+						sizeSize, ism.GetBytesCount(),
+						[&]() {
+							return ism.GetByteAndAdv();
+						}
+					);
+			}
+			break;
+
+		case RlpEncodeType::Byte:
+		case RlpEncodeType::BytesShort:
+		case RlpEncodeType::BytesLong:
+		default:
+			throw ParseError("Expecting a list data",
+				ism.GetBytesCount());
+		}
+
+		return size;
+	}
+
+	static size_t ProcRlpBytesHeader(
+		InputStateMachineIf<InputByteType>& ism,
+		RlpEncodeType rlpType,
+		InputByteType rlpVal,
+		size_t& byteLeft)
+	{
+		size_t size = 0;
+		switch (rlpType)
+		{
+		// protected internal function; caller should take care of this:
+		// case RlpEncodeType::Byte:
+		// 	break;
+
+		case RlpEncodeType::BytesShort:
+			size = static_cast<size_t>(rlpVal);
+			break;
+
+		case RlpEncodeType::BytesLong:
+			{
+				size_t sizeSize = static_cast<size_t>(rlpVal);
+				CheckByteLeft(byteLeft, sizeSize, ism.GetBytesCount());
+				size =
+					Internal::ParseSizeValue<Internal::Endian::native>::Parse(
+						sizeSize, ism.GetBytesCount(),
+						[&]() {
+							return ism.GetByteAndAdv();
+						}
+					);
+			}
+			break;
+
+		case RlpEncodeType::ListShort:
+		case RlpEncodeType::ListLong:
+		default:
+			throw ParseError("Expecting a byte string data",
+				ism.GetBytesCount());
+		}
+
+		return size;
 	}
 
 }; // class ParserBase
