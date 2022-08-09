@@ -133,6 +133,13 @@ GTEST_TEST(TestRlpInputStateMachine, ParseSizeValue)
 		LittleType::Parse(2, 0, testInFunc);,
 		ParseError
 	);
+
+	// Input length exceeds target type size
+	i = 0x0000U;
+	EXPECT_THROW(
+		LittleType::Parse(10, 0, testInFunc);,
+		ParseError
+	);
 }
 
 namespace
