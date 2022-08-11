@@ -65,6 +65,8 @@ struct RlpEncTypeCatName<RlpEncTypeCat::List>
 	}
 }; // struct RlpEncTypeCatName<RlpEncTypeCat::List>
 
+} // namespace Internal
+
 enum class Endian
 {
 #ifdef __cpp_lib_endian
@@ -89,7 +91,5 @@ enum class Endian
 #	error "Cannot determine the platform endianness"
 #endif
 }; // enum class Endian
-
-} // namespace Internal
 
 } // namespace SimpleRlp

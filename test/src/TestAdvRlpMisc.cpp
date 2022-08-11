@@ -164,7 +164,7 @@ GTEST_TEST(TestAdvRlpMisc, PrimitiveToRaw)
 		uint32_t testVal = 0x12345678U;
 		ctn.resize(sizeof(testVal));
 
-		Internal::PrimitiveToRaw<Internal::SimRlp::Internal::Endian::little>::
+		Internal::PrimitiveToRaw<Internal::SimRlp::Endian::little>::
 			FromInt(ctn.data(), ctn.size(), testVal);
 
 		EXPECT_EQ(ctn, std::vector<uint8_t>({ 0x78U, 0x56U, 0x34U, 0x12U, }));
@@ -177,7 +177,7 @@ GTEST_TEST(TestAdvRlpMisc, PrimitiveToRaw)
 		ctn.resize(sizeof(testVal) + 1);
 
 		auto testProg = [&]() {
-			Internal::PrimitiveToRaw<Internal::SimRlp::Internal::Endian::little>::
+			Internal::PrimitiveToRaw<Internal::SimRlp::Endian::little>::
 				FromInt(ctn.data(), ctn.size(), testVal);
 		};
 		EXPECT_THROW(testProg(), SerializeError);

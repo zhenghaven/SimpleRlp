@@ -151,7 +151,7 @@ protected:
 				size_t sizeSize = static_cast<size_t>(rlpVal);
 				CheckByteLeft(byteLeft, sizeSize, ism.GetBytesCount());
 				size =
-					Internal::ParseSizeValue<Internal::Endian::native>::Parse(
+					Internal::ParseSizeValue<Endian::native>::Parse(
 						sizeSize, ism.GetBytesCount(),
 						[&]() {
 							return ism.GetByteAndAdv();
@@ -193,7 +193,7 @@ protected:
 				size_t sizeSize = static_cast<size_t>(rlpVal);
 				CheckByteLeft(byteLeft, sizeSize, ism.GetBytesCount());
 				size =
-					Internal::ParseSizeValue<Internal::Endian::native>::Parse(
+					Internal::ParseSizeValue<Endian::native>::Parse(
 						sizeSize, ism.GetBytesCount(),
 						[&]() {
 							return ism.GetByteAndAdv();

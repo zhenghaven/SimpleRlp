@@ -118,8 +118,8 @@ struct TransformCatIntegerImpl
 
 	RetType operator()(size_t pos, _ListObjType&& l)
 	{
-		static constexpr Internal::SimRlp::Internal::Endian srcEndian =
-			Internal::SimRlp::Internal::Endian::little;
+		static constexpr Internal::SimRlp::Endian srcEndian =
+			Internal::SimRlp::Endian::little;
 
 		PreCheckCatInteger(pos, l);
 
@@ -394,7 +394,7 @@ struct BuildIntRawDataImpl
 		signByte = (val >= 0) ? 0x10U : 0x11U;
 
 		ctn.resize(sizeof(UIntType));
-		PrimitiveToRaw<SimRlp::Internal::Endian::little>::
+		PrimitiveToRaw<SimRlp::Endian::little>::
 			FromInt(ctn.data(), ctn.size(), uval);
 	}
 }; // struct BuildIntRawDataImpl
@@ -413,7 +413,7 @@ struct BuildUIntRawDataImpl
 		signByte = 0x00U;
 
 		ctn.resize(sizeof(InputType));
-		PrimitiveToRaw<SimRlp::Internal::Endian::little>::
+		PrimitiveToRaw<SimRlp::Endian::little>::
 			FromInt(ctn.data(), ctn.size(), val);
 	}
 }; // struct BuildUIntRawDataImpl
