@@ -61,11 +61,11 @@ inline _OutType DecodeIntBytes(const uint8_t (&b)[sizeof(_OutType)])
 
 } // namespace Internal
 
-template<typename _OutType, Internal::Endian _EndianType>
+template<typename _OutType, Endian _OutEndianType>
 struct ParsePrimitiveIntValue;
 
 template<typename _OutType>
-struct ParsePrimitiveIntValue<_OutType, Internal::Endian::little>
+struct ParsePrimitiveIntValue<_OutType, Endian::little>
 {
 	template<typename _InputFuncType>
 	static _OutType Parse(size_t len, _InputFuncType inFunc)
@@ -118,7 +118,7 @@ struct ParseSizeValue
 			throw ParseError(e.what(), pos);
 		}
 	}
-}; // ParseSizeValue<Internal::Endian::little>
+}; // ParseSizeValue<Endian::little>
 
 template<typename _ValType, bool isValSigned>
 struct DecodeRlpLeadingByteImpl;

@@ -103,7 +103,7 @@ GTEST_TEST(TestRlpInputStateMachine, ParseSizeValue)
 	};
 
 	// little endian
-	using LittleType = Internal::ParseSizeValue<Internal::Endian::little>;
+	using LittleType = Internal::ParseSizeValue<Endian::little>;
 
 	// input: 0x00 0x01 0x02 0x03 0x04
 	// little endian bytes: 0x04 0x03 0x02 0x01 0x00 | 0x00 0x00 0x00

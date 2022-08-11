@@ -22,15 +22,15 @@ namespace Internal
 {
 
 template<
-	SimRlp::Internal::Endian _OutEndian,
-	SimRlp::Internal::Endian _PlatformEndian = SimRlp::Internal::Endian::native>
+	SimRlp::Endian _OutEndian,
+	SimRlp::Endian _PlatformEndian = SimRlp::Endian::native>
 struct PrimitiveToRaw; // struct PrimitiveToRaw
 
 
 template<>
 struct PrimitiveToRaw<
-	SimRlp::Internal::Endian::little,
-	SimRlp::Internal::Endian::little>
+	SimRlp::Endian::little,
+	SimRlp::Endian::little>
 {
 	template<typename _IntType>
 	static void FromInt(void* dest, size_t destSize, _IntType val)

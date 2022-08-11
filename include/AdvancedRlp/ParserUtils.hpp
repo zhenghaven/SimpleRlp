@@ -159,15 +159,15 @@ inline void CheckRlpListTypeSizeLe(
 
 
 template<
-	SimRlp::Internal::Endian _InEndian,
-	SimRlp::Internal::Endian _PlatformEndian = SimRlp::Internal::Endian::native>
+	SimRlp::Endian _InEndian,
+	SimRlp::Endian _PlatformEndian = SimRlp::Endian::native>
 struct RawToPrimitive; // struct RawToPrimitive
 
 
 template<>
 struct RawToPrimitive<
-	SimRlp::Internal::Endian::little,
-	SimRlp::Internal::Endian::little>
+	SimRlp::Endian::little,
+	SimRlp::Endian::little>
 {
 	template<typename _IntType>
 	static _IntType ToInt(const void* src, size_t srcSize)
