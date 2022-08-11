@@ -50,52 +50,75 @@ struct IsValWithinAByte<_ValType, true>
 	}
 }; // struct IsValWithinAByte
 
-
-inline size_t DecodeSizeBytes(const uint8_t (&b)[8])
+template<typename _OutType>
+inline _OutType DecodeIntBytes(const uint8_t (&b)[sizeof(_OutType)])
 {
-	uint64_t size = 0;
-	std::memcpy(&size, &b[0], sizeof(uint64_t));
+	_OutType val = 0;
+	std::memcpy(&val, &b[0], sizeof(_OutType));
 
-	return static_cast<size_t>(size);
+	return val;
 }
 
-template<Endian _EndianType>
-struct ParseSizeValue;
+} // namespace Internal
 
-template<>
-struct ParseSizeValue<Endian::little>
+template<typename _OutType, Internal::Endian _EndianType>
+struct ParsePrimitiveIntValue;
+
+template<typename _OutType>
+struct ParsePrimitiveIntValue<_OutType, Internal::Endian::little>
 {
 	template<typename _InputFuncType>
-	static size_t Parse(size_t len, size_t pos, _InputFuncType inFunc)
+	static _OutType Parse(size_t len, _InputFuncType inFunc)
 	{
-		static constexpr size_t sk_byteInBits = 8;
-		uint8_t vals[sk_byteInBits] = { 0 };
+		static constexpr size_t sk_targetTypeBytes = sizeof(_OutType);
+		uint8_t vals[sk_targetTypeBytes] = { 0 };
 
-		// NOTE: len is not checked to ensure len <= 8, since this is internal
-		// func
-		// size_t missingLen = sk_byteInBits - len;
+		if (len > sk_targetTypeBytes)
+		{
+			throw ParseError("The given byte size is larger than"
+				" the target int type");
+		}
 
 		for(size_t i = 0; i < len; ++i)
 		{
+			// NOTE: this doesn't support signed input values
 			auto val = inFunc();
 			if (!Internal::IsValWithinAByte<decltype(val),
 				std::numeric_limits<decltype(val)>::digits <= 8
 			>::Check(val))
 			{
-				throw ParseError("Invalid input value", pos + i);
+				throw ParseError("Expecting a byte value, while the given input"
+					" exceeds the range of a byte");
 			}
 
 			vals[len - 1 - i] = static_cast<uint8_t>(val);
 		}
 
-		return DecodeSizeBytes(vals);
+		return Internal::DecodeIntBytes<_OutType>(vals);
 	}
-}; // struct ParseSizeValue<Endian::little>
-
-} // namespace Internal
+}; // struct ParsePrimitiveIntValue<_OutType, Endian::little>
 
 namespace Internal
 {
+
+template<Endian _EndianType>
+struct ParseSizeValue
+{
+	template<typename _InputFuncType>
+	static size_t Parse(size_t len, size_t pos, _InputFuncType inFunc)
+	{
+		try
+		{
+			uint64_t val64 = ParsePrimitiveIntValue<uint64_t, _EndianType>::
+				Parse(len, inFunc);
+			return static_cast<size_t>(val64);
+		}
+		catch(const ParseError& e)
+		{
+			throw ParseError(e.what(), pos);
+		}
+	}
+}; // ParseSizeValue<Internal::Endian::little>
 
 template<typename _ValType, bool isValSigned>
 struct DecodeRlpLeadingByteImpl;
