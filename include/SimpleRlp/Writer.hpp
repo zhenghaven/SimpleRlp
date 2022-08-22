@@ -84,14 +84,22 @@ struct WriterStaticDictImpl
 	using Concatenator = OutContainerConcat<_OutCtnType>;
 
 	template<typename _StaticDictObjType>
-	inline static _OutCtnType Write(const _StaticDictObjType& inDict)
+	inline static _OutCtnType Write(
+		const _StaticDictObjType& inDict,
+		size_t skipLast = 0)
 	{
 		_OutCtnType outBytes;
 
+		size_t itemLeft = inDict.size();
 		for (const auto& item : inDict)
 		{
+			if (itemLeft <= skipLast)
+			{
+				break;
+			}
 			auto subBytes = GenericWriter::Write(item.second.get());
 			Concatenator()(outBytes, subBytes);
+			--itemLeft;
 		}
 
 		return SerializeBytes(RlpEncTypeCat::List, outBytes, Concatenator());
