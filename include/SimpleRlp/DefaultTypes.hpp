@@ -123,7 +123,7 @@ using EthHeader = EthHeaderImpl<BytesObjType>;
 
 using EthHeaderParser = StaticDictParserT<
 		Internal::EthHeaderParserTupleCore<BytesParser>,
-		false,
+		true,
 		false,
 		EthHeader>;
 

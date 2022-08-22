@@ -63,6 +63,9 @@ using EthHeaderTupleCore = std::tuple<
 		_BytesObjType>,
 	// 15.
 	std::pair<Obj::StrKey<SIMOBJ_KSTR("Nonce")>,
+		_BytesObjType>,
+	// 16.
+	std::pair<Obj::StrKey<SIMOBJ_KSTR("BaseFee")>,
 		_BytesObjType>
 	>;
 
@@ -112,6 +115,9 @@ using EthHeaderParserTupleCore = std::tuple<
 		_BytesParserType>,
 	// 15.
 	std::pair<Obj::StrKey<SIMOBJ_KSTR("Nonce")>,
+		_BytesParserType>,
+	// 16.
+	std::pair<Obj::StrKey<SIMOBJ_KSTR("BaseFee")>,
 		_BytesParserType>
 	>;
 
@@ -311,6 +317,18 @@ public:
 	get_Nonce() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Nonce")> >();
+	}
+
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("BaseFee")> >
+	get_BaseFee()
+	{
+		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("BaseFee")> >();
+	}
+
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("BaseFee")> >
+	get_BaseFee() const
+	{
+		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("BaseFee")> >();
 	}
 
 }; // class EthHeaderImpl
