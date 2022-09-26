@@ -71,7 +71,6 @@ struct ParsePrimitiveIntValue<_OutType, Endian::little>
 	static _OutType Parse(size_t len, _InputFuncType inFunc)
 	{
 		static constexpr size_t sk_targetTypeBytes = sizeof(_OutType);
-		uint8_t vals[sk_targetTypeBytes] = { 0 };
 
 		if (len > sk_targetTypeBytes)
 		{
@@ -79,22 +78,23 @@ struct ParsePrimitiveIntValue<_OutType, Endian::little>
 				" the target int type");
 		}
 
-		for(size_t i = 0; i < len; ++i)
+		_OutType res = 0;
+		for (size_t i = len; i > 0; --i)
 		{
 			// NOTE: this doesn't support signed input values
 			auto val = inFunc();
-			if (!Internal::IsValWithinAByte<decltype(val),
-				std::numeric_limits<decltype(val)>::digits <= 8
-			>::Check(val))
+			if (!Internal::IsValWithinAByte<
+					decltype(val),
+					std::numeric_limits<decltype(val)>::digits <= 8
+				>::Check(val))
 			{
 				throw ParseError("Expecting a byte value, while the given input"
 					" exceeds the range of a byte");
 			}
-
-			vals[len - 1 - i] = static_cast<uint8_t>(val);
+			res |= (static_cast<_OutType>(val) << ((i -1) * 8));
 		}
 
-		return Internal::DecodeIntBytes<_OutType>(vals);
+		return res;
 	}
 }; // struct ParsePrimitiveIntValue<_OutType, Endian::little>
 

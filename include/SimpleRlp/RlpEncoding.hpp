@@ -28,38 +28,70 @@ namespace SIMPLERLP_CUSTOMIZED_NAMESPACE
 namespace Internal
 {
 
-inline void EncodeSizeBytes(uint8_t (&b)[8], uint64_t inSize)
+
+/**
+ * @brief Encoding a primitive integer value into a RLP byte sequence.
+ *
+ * @tparam _IntType      The type of the input integer value
+ * @tparam _EndianType   The endian type that the input integer value is in
+ *                       (usually depending on the platform)
+ * @tparam _IsDestSigned Is the type of each individual byte in the
+ *                       *destination container* a signed value?
+ *                       Currently we only support unsigned types
+ *                       (e.g., array of uint8_t); thus, signed types
+ *                       (e.g., array of char or int8_t) does not work
+ */
+template<typename _IntType, Endian _EndianType, bool _IsDestSigned>
+struct EncodePrimitiveIntValue;
+
+template<typename _IntType>
+struct EncodePrimitiveIntValue<_IntType, Endian::little, false>
 {
-	std::memcpy(&b[0], &inSize, sizeof(uint64_t));
-}
+	template<typename _CtnType>
+	static void Encode(_CtnType& res, const _IntType& inVal)
+	{
+		static constexpr size_t sk_inTypeSize = sizeof(_IntType);
+
+		_IntType tmp = 0;
+		for (size_t i = 0; i < sk_inTypeSize - 1; ++i)
+		{
+			tmp |= ((inVal >> (i * 8)) & 0xFFU);
+			tmp <<= 8;
+		}
+		// The last byte should not be shifted
+		tmp |= ((inVal >> ((sk_inTypeSize - 1) * 8)) & 0xFFU);
+
+		bool writeStart = false;
+		for (size_t i = 0; i < sk_inTypeSize; ++i)
+		{
+			if (
+				!writeStart &&        // we haven't start writing (leading)
+				((tmp & 0xFFU) == 0)  // this byte is 0
+				)
+			{
+				// skip leading zeros
+			}
+			else
+			{
+				writeStart = true;
+				res.push_back(static_cast<uint8_t>(tmp & 0xFFU));
+			}
+			tmp >>= 8;
+		}
+	}
+}; // EncodePrimitiveIntValue<_IntType, Endian::little, false>
 
 
 template<Endian _EndianType, bool _IsDestSigned>
-struct EncodeSizeValue;
-
-template<>
-struct EncodeSizeValue<Endian::little, false>
+struct EncodeSizeValue
 {
 	template<typename _CtnType>
 	static void Encode(_CtnType& res, size_t inSize)
 	{
-		static constexpr size_t sk_byteInBits = 8;
-		uint8_t vals[sk_byteInBits] = { 0 };
-
-		EncodeSizeBytes(vals, inSize);
-
-		size_t pos = sk_byteInBits - 1;
-		for (; pos > 0 && vals[pos] == 0; --pos) {} // Skip leading zeros
-
-		for (; pos > 0; --pos)
-		{
-			res.push_back(vals[pos]); // need _IsDestSigned == false
-		}
-
-		// Ensure there is at least 1 item
-		res.push_back(vals[0]);
+		EncodePrimitiveIntValue<size_t, _EndianType, _IsDestSigned>::
+			Encode(res, inSize);
 	}
-}; // struct EncodeSizeValue<Endian::little>
+}; // struct EncodeSizeValue
 
 
 template<bool _IsValSigned>
