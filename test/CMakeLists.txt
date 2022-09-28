@@ -40,7 +40,7 @@ include(FetchContent)
 FetchContent_Declare(
 	git_simplecmakescripts
 	GIT_REPOSITORY https://github.com/zhenghaven/SimpleCMakeScripts.git
-	GIT_TAG        main
+	GIT_TAG        v0.3
 )
 FetchContent_MakeAvailable(git_simplecmakescripts)
 simplecmakescripts_enable()
