@@ -9,8 +9,6 @@ OPTION(SIMPLERLP_TEST_CXX_STANDARD
 	"C++ standard version used to build SimpleRlp test executable." 11)
 OPTION(SIMPLERLP_TEST_LCOV "Option to turn on test code coverage." OFF)
 
-include(TestCoverage.cmake)
-
 ################################################################################
 # Set compile options
 ################################################################################
@@ -38,6 +36,14 @@ endif()
 ################################################################################
 
 include(FetchContent)
+
+FetchContent_Declare(
+	git_simplecmakescripts
+	GIT_REPOSITORY https://github.com/zhenghaven/SimpleCMakeScripts.git
+	GIT_TAG        v0.3
+)
+FetchContent_MakeAvailable(git_simplecmakescripts)
+simplecmakescripts_enable()
 
 FetchContent_Declare(
 	git_googletest
@@ -83,6 +89,7 @@ set_property(TARGET SimpleRlp_test
 	PROPERTY CXX_STANDARD ${SIMPLERLP_TEST_CXX_STANDARD})
 
 if (SIMPLERLP_TEST_LCOV)
+	include(SimpleTestCoverage)
 	message(STATUS "Setting up test coverage target...")
-	setup_cxx_test_coverage(SimpleRlp_test "${PROJECT_SOURCE_DIR}/include")
+	simple_cxx_test_coverage(SimpleRlp_test "${PROJECT_SOURCE_DIR}/include")
 endif()
