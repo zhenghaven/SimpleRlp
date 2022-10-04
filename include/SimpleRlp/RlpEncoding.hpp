@@ -25,9 +25,6 @@ namespace SIMPLERLP_CUSTOMIZED_NAMESPACE
 // Encoding
 //====================
 
-namespace Internal
-{
-
 
 /**
  * @brief Encoding a primitive integer value into a RLP byte sequence.
@@ -80,6 +77,9 @@ struct EncodePrimitiveIntValue<_IntType, Endian::little, false>
 		}
 	}
 }; // EncodePrimitiveIntValue<_IntType, Endian::little, false>
+
+namespace Internal
+{
 
 
 template<Endian _EndianType, bool _IsDestSigned>
