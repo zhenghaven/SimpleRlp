@@ -69,7 +69,7 @@ private: // static members:
 	{
 		std::string catIdHex;
 		Internal::SimRlp::Internal::Obj::Internal::
-			ByteToString<std::string::value_type>(
+			ByteToHEX<true, std::string::value_type>(
 				std::back_inserter(catIdHex), catId);
 
 		return "Unkown CAT ID - " + catIdHex;

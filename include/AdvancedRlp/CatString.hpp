@@ -109,7 +109,7 @@ struct TransformCatStringImpl
 		{
 			std::string chWidthHex;
 			Internal::SimRlp::Internal::Obj::Internal::
-				ByteToString<std::string::value_type>(
+				ByteToHEX<true, std::string::value_type>(
 					std::back_inserter(chWidthHex), chWidth);
 
 			throw ParseError(

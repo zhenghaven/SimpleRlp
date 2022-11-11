@@ -97,7 +97,7 @@ struct TransformGenericImpl
 		{
 			std::string errMsg = "Unsupported CAT ID value - ";
 			Internal::SimRlp::Internal::Obj::Internal::
-			ByteToString<std::string::value_type>(
+			ByteToHEX<true, std::string::value_type>(
 				std::back_inserter(errMsg), specs[0]);
 			throw ParseError(errMsg, pos);
 		}

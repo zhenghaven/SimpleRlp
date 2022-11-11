@@ -94,7 +94,7 @@ struct SolveSignedness
 		{
 			std::string errMsg = "Invalid signedness byte (";
 			Internal::SimRlp::Internal::Obj::Internal::
-			ByteToString<std::string::value_type>(
+			ByteToHEX<true, std::string::value_type>(
 				std::back_inserter(errMsg), sigByte);
 			errMsg += ") is given";
 			throw ParseError(errMsg, pos);
@@ -180,7 +180,7 @@ struct TransformCatIntegerImpl
 		{
 			std::string errMsg = "Invalid integer width byte (";
 			Internal::SimRlp::Internal::Obj::Internal::
-			ByteToString<std::string::value_type>(
+			ByteToHEX<true, std::string::value_type>(
 				std::back_inserter(errMsg), widthByte);
 			errMsg += ") is given";
 			throw ParseError(errMsg, pos);
