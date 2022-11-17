@@ -5,7 +5,13 @@
 
 #pragma once
 
+
+#if __cplusplus >= 202002L
 #include <version>
+#else
+#include <ciso646>
+#endif // __cplusplus >= 202002L
+
 #ifdef __cpp_lib_endian
 #include <bit>
 #endif
