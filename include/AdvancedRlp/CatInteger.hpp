@@ -64,7 +64,7 @@ struct SolveSignedness
 		if (Internal::SimRlp::Internal::Obj::Internal::
 			RealNumCompare<_UIntType, _IntType>::Greater(
 				val,
-				std::numeric_limits<_IntType>::max()))
+				(std::numeric_limits<_IntType>::max)()))
 		{
 			throw ParseError("The integer received exceeds the range of the"
 				" targeting signed integer", pos);
