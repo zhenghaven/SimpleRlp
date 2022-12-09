@@ -44,13 +44,17 @@ using BytesParser =
 		TransformByteToBytes<ByteValType, BytesObjType>,
 		TransformPassthrough<BytesObjType> >;
 
-template<typename _InnerBytesParser, typename _InnerListParser>
+template<
+	typename _InnerBytesParser,
+	typename _InnerListParser,
+	typename _ListObjType = ListObjType
+>
 using ListParserT =
 	ListParserImpl<
 		InputContainerType,
 		ByteValType,
-		ListObjType,
-		TransformPassthrough<ListObjType>,
+		_ListObjType,
+		TransformPassthrough<_ListObjType>,
 		_InnerBytesParser,
 		_InnerListParser>;
 
