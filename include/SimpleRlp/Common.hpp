@@ -6,15 +6,9 @@
 #pragma once
 
 
-#if __cplusplus >= 202002L
-#include <version>
-#else
-#include <ciso646>
-#endif // __cplusplus >= 202002L
+#include <SimpleObjects/Endianness.hpp>
 
-#ifdef __cpp_lib_endian
-#include <bit>
-#endif
+#include "Internal/SimpleObjects.hpp"
 
 
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE
@@ -73,29 +67,6 @@ struct RlpEncTypeCatName<RlpEncTypeCat::List>
 
 } // namespace Internal
 
-enum class Endian
-{
-#ifdef __cpp_lib_endian
-    little =
-		static_cast<std::underlying_type_t<std::endian> >(std::endian::little),
-    big    =
-		static_cast<std::underlying_type_t<std::endian> >(std::endian::big),
-    native =
-		static_cast<std::underlying_type_t<std::endian> >(std::endian::native),
-// src: https://en.cppreference.com/w/cpp/types/endian
-#elif defined(_WIN32)
-    little = 0,
-    big    = 1,
-    native = little,
-#elif defined(__ORDER_LITTLE_ENDIAN__) && \
-		defined(__ORDER_BIG_ENDIAN__) && \
-		defined(__BYTE_ORDER__)
-    little = __ORDER_LITTLE_ENDIAN__,
-    big    = __ORDER_BIG_ENDIAN__,
-    native = __BYTE_ORDER__,
-#else
-#	error "Cannot determine the platform endianness"
-#endif
-}; // enum class Endian
+using Endian = Internal::Obj::Endian;
 
 } // namespace SimpleRlp

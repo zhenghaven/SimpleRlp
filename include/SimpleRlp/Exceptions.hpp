@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <SimpleObjects/Exception.hpp>
+
 #include "Internal/SimpleObjects.hpp"
 
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE

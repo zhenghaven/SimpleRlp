@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <SimpleObjects/BasicDefs.hpp>
+
 #include "RlpEncoding.hpp"
 
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE

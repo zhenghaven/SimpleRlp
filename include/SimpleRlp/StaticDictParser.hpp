@@ -7,6 +7,7 @@
 
 #include <type_traits>
 
+#include <SimpleObjects/StaticDict.hpp>
 #include <SimpleObjects/Utils.hpp>
 
 #include "ParserBase.hpp"

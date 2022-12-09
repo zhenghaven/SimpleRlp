@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <SimpleObjects/Iterator.hpp>
+
 #include "Internal/SimpleObjects.hpp"
 
 #include "InputStateMachine.hpp"
