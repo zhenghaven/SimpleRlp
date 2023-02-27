@@ -24,4 +24,9 @@ inline OutputContainerType WriteRlp(const Internal::Obj::BaseObj& obj)
 	return WriterGeneric::Write(obj);
 }
 
+inline size_t CalcRlpSize(const Internal::Obj::BaseObj& obj)
+{
+	return WriterGeneric::CalcSize(obj);
+}
+
 } // namespace SimpleRlp

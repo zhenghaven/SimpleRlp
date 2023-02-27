@@ -542,22 +542,22 @@ struct CatIntegerWriterImpl
 
 		// 3.build RLP list
 		specs = Internal::SimRlp::
-			SerializeBytes(
-				Internal::SimRlp::RlpEncTypeCat::Bytes,
+			SerializeBytes<Internal::SimRlp::RlpEncTypeCat::Bytes>(
 				specs,
-				ccntr);
+				ccntr
+			);
 		rawData = Internal::SimRlp::
-			SerializeBytes(
-				Internal::SimRlp::RlpEncTypeCat::Bytes,
+			SerializeBytes<Internal::SimRlp::RlpEncTypeCat::Bytes>(
 				rawData,
-				ccntr);
+				ccntr
+			);
 		ccntr(specs, rawData);
 
 		return Internal::SimRlp::
-			SerializeBytes(
-				Internal::SimRlp::RlpEncTypeCat::List,
+			SerializeBytes<Internal::SimRlp::RlpEncTypeCat::List>(
 				specs,
-				ccntr);
+				ccntr
+			);
 	}
 
 }; // struct CatIntegerWriterImpl
