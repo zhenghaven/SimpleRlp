@@ -68,6 +68,12 @@ using EthHeaderTupleCore = std::tuple<
 		_BytesObjType>,
 	// 16.
 	std::pair<Obj::StrKey<SIMOBJ_KSTR("BaseFee")>,
+		_BytesObjType>,
+	// 17.
+	std::pair<Obj::StrKey<SIMOBJ_KSTR("WithdrawalsHash")>,
+		_BytesObjType>,
+	// 18.
+	std::pair<Obj::StrKey<SIMOBJ_KSTR("ExcessDataGas")>,
 		_BytesObjType>
 	>;
 
@@ -120,6 +126,12 @@ using EthHeaderParserTupleCore = std::tuple<
 		_BytesParserType>,
 	// 16.
 	std::pair<Obj::StrKey<SIMOBJ_KSTR("BaseFee")>,
+		_BytesParserType>,
+	// 17.
+	std::pair<Obj::StrKey<SIMOBJ_KSTR("WithdrawalsHash")>,
+		_BytesParserType>,
+	// 18.
+	std::pair<Obj::StrKey<SIMOBJ_KSTR("ExcessDataGas")>,
 		_BytesParserType>
 	>;
 
@@ -141,6 +153,7 @@ public:
 
 	using Base::Base;
 
+	// 01. ParentHash
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ParentHash")> >
 	get_ParentHash()
 	{
@@ -153,6 +166,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ParentHash")> >();
 	}
 
+	// 02. Sha3Uncles
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Sha3Uncles")> >
 	get_Sha3Uncles()
 	{
@@ -165,6 +179,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Sha3Uncles")> >();
 	}
 
+	// 03. Miner
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Miner")> >
 	get_Miner()
 	{
@@ -177,6 +192,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Miner")> >();
 	}
 
+	// 04. StateRoot
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("StateRoot")> >
 	get_StateRoot()
 	{
@@ -189,6 +205,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("StateRoot")> >();
 	}
 
+	// 05. TransactionsRoot
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("TransactionsRoot")> >
 	get_TransactionsRoot()
 	{
@@ -201,6 +218,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("TransactionsRoot")> >();
 	}
 
+	// 06. ReceiptsRoot
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ReceiptsRoot")> >
 	get_ReceiptsRoot()
 	{
@@ -213,6 +231,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ReceiptsRoot")> >();
 	}
 
+	// 07. LogsBloom
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("LogsBloom")> >
 	get_LogsBloom()
 	{
@@ -225,6 +244,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("LogsBloom")> >();
 	}
 
+	// 08. Difficulty
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Difficulty")> >
 	get_Difficulty()
 	{
@@ -237,6 +257,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Difficulty")> >();
 	}
 
+	// 09. Number
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Number")> >
 	get_Number()
 	{
@@ -249,6 +270,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Number")> >();
 	}
 
+	// 10. GasLimit
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasLimit")> >
 	get_GasLimit()
 	{
@@ -261,6 +283,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("GasLimit")> >();
 	}
 
+	// 11. GasUsed
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("GasUsed")> >
 	get_GasUsed()
 	{
@@ -273,6 +296,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("GasUsed")> >();
 	}
 
+	// 12. Timestamp
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Timestamp")> >
 	get_Timestamp()
 	{
@@ -285,6 +309,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Timestamp")> >();
 	}
 
+	// 13. ExtraData
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ExtraData")> >
 	get_ExtraData()
 	{
@@ -297,6 +322,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ExtraData")> >();
 	}
 
+	// 14. MixHash
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("MixHash")> >
 	get_MixHash()
 	{
@@ -309,6 +335,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("MixHash")> >();
 	}
 
+	// 15. Nonce
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("Nonce")> >
 	get_Nonce()
 	{
@@ -321,6 +348,7 @@ public:
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("Nonce")> >();
 	}
 
+	// 16. BaseFee
 	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("BaseFee")> >
 	get_BaseFee()
 	{
@@ -331,6 +359,32 @@ public:
 	get_BaseFee() const
 	{
 		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("BaseFee")> >();
+	}
+
+	// 17. WithdrawalsHash
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("WithdrawalsHash")> >
+	get_WithdrawalsHash()
+	{
+		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("WithdrawalsHash")> >();
+	}
+
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("WithdrawalsHash")> >
+	get_WithdrawalsHash() const
+	{
+		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("WithdrawalsHash")> >();
+	}
+
+	// 18. ExcessDataGas
+	typename Base::template GetRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ExcessDataGas")> >
+	get_ExcessDataGas()
+	{
+		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ExcessDataGas")> >();
+	}
+
+	typename Base::template GetConstRef<Internal::Obj::StrKey<SIMOBJ_KSTR("ExcessDataGas")> >
+	get_ExcessDataGas() const
+	{
+		return Base::template get<Internal::Obj::StrKey<SIMOBJ_KSTR("ExcessDataGas")> >();
 	}
 
 }; // class EthHeaderImpl
