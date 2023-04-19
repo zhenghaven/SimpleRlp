@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <SimpleObjects/Iterator.hpp>
+
 #include "Internal/SimpleObjects.hpp"
 
 #include "InputStateMachine.hpp"
@@ -103,13 +105,15 @@ public:
 		return Parse(ism, rlpType, rlpVal, byteLeft);
 	}
 
-	virtual RetType Parse(const ContainerType& ctn, bool checkExtra = true) const
+	virtual RetType Parse(
+		IteratorType begin,
+		IteratorType end,
+		size_t size,
+		bool checkExtra = true
+	) const
 	{
-		ISMType ism(
-			Internal::Obj::ToFrIt<true>(ctn.cbegin()),
-			Internal::Obj::ToFrIt<true>(ctn.cend()));
+		ISMType ism(begin, end);
 
-		size_t size = ctn.size();
 		auto res = Parse(ism, size);
 
 		if (checkExtra && (size != 0))
@@ -119,6 +123,16 @@ public:
 		}
 
 		return res;
+	}
+
+	virtual RetType Parse(const ContainerType& ctn, bool checkExtra = true) const
+	{
+		return Parse(
+			Internal::Obj::ToFrIt<true>(ctn.cbegin()),
+			Internal::Obj::ToFrIt<true>(ctn.cend()),
+			ctn.size(),
+			checkExtra
+		);
 	}
 
 protected:

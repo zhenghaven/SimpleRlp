@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <SimpleObjects/SimpleObjects.hpp>
 
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE
 namespace SimpleRlp

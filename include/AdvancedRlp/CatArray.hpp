@@ -113,10 +113,10 @@ struct CatArrayWriterImpl
 
 		// 3.build RLP list
 		return Internal::SimRlp::
-			SerializeBytes(
-				Internal::SimRlp::RlpEncTypeCat::List,
+			SerializeBytes<Internal::SimRlp::RlpEncTypeCat::List>(
 				outBytes,
-				ccntr);
+				ccntr
+			);
 	}
 
 }; // struct CatArrayWriterImpl

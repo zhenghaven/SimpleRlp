@@ -42,19 +42,35 @@ using TransformGeneric = TransformGenericImpl<
 	Internal::SimRlp::Internal::Obj::Object>;
 
 
-using GenericParser = CompositeParserBase<
+template<typename _ContainerType>
+using GenericParserT = CompositeParserBase<
+	_ContainerType,
 	TransformGeneric,
 	Internal::SimRlp::SelfParserPlaceholder>;
 
 
+using GenericParser = GenericParserT<Internal::SimRlp::InputContainerType>;
+
+
 using CatArrayParser = CompositeParserBase<
+	Internal::SimRlp::InputContainerType,
 	TransformCatArray,
 	GenericParser>;
 
 
 using CatDictParser = CompositeParserBase<
+	Internal::SimRlp::InputContainerType,
 	TransformCatDict,
 	GenericParser>;
+
+
+template<typename _ContainerType>
+inline typename GenericParserT<_ContainerType>::RetType Parse(
+	const _ContainerType& container
+)
+{
+	return GenericParserT<_ContainerType>().Parse(container);
+}
 
 
 // ====================

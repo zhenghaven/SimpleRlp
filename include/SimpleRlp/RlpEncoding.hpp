@@ -44,37 +44,48 @@ struct EncodePrimitiveIntValue;
 template<typename _IntType>
 struct EncodePrimitiveIntValue<_IntType, Endian::little, false>
 {
-	template<typename _CtnType>
-	static void Encode(_CtnType& res, const _IntType& inVal)
+	static size_t EncodedWidth(const _IntType& inVal)
 	{
 		static constexpr size_t sk_inTypeSize = sizeof(_IntType);
+		static constexpr size_t sk_bitsPerByte = 8;
 
-		_IntType tmp = 0;
-		for (size_t i = 0; i < sk_inTypeSize - 1; ++i)
+		size_t zeroBytes = 0;
+		for (size_t i = sk_inTypeSize; i > 0; --i)
 		{
-			tmp |= ((inVal >> (i * 8)) & 0xFFU);
-			tmp <<= 8;
-		}
-		// The last byte should not be shifted
-		tmp |= ((inVal >> ((sk_inTypeSize - 1) * 8)) & 0xFFU);
-
-		bool writeStart = false;
-		for (size_t i = 0; i < sk_inTypeSize; ++i)
-		{
-			if (
-				!writeStart &&        // we haven't start writing (leading)
-				((tmp & 0xFFU) == 0)  // this byte is 0
-				)
+			if (((inVal >> ((i - 1) * sk_bitsPerByte)) & 0xFFU) == 0)
 			{
-				// skip leading zeros
+				++zeroBytes;
 			}
 			else
 			{
-				writeStart = true;
-				res.push_back(static_cast<uint8_t>(tmp & 0xFFU));
+				break;
 			}
-			tmp >>= 8;
 		}
+
+		return sk_inTypeSize - zeroBytes;
+	}
+
+	template<typename _DestIt>
+	static _DestIt Encode(const _IntType& inVal, _DestIt destIt)
+	{
+		static constexpr size_t sk_bitsPerByte = 8;
+
+		// Write small endian data as big endian bytes
+		size_t widthNeeded = EncodedWidth(inVal);
+		for (size_t i = widthNeeded; i > 0; --i)
+		{
+			*(destIt++) = static_cast<uint8_t>(
+				(inVal >> ((i - 1) * sk_bitsPerByte)) & 0xFFU
+			);
+		}
+
+		return destIt;
+	}
+
+	template<typename _CtnType>
+	static void Encode(_CtnType& res, const _IntType& inVal)
+	{
+		Encode(inVal, std::back_inserter(res));
 	}
 }; // EncodePrimitiveIntValue<_IntType, Endian::little, false>
 
@@ -85,6 +96,19 @@ namespace Internal
 template<Endian _EndianType, bool _IsDestSigned>
 struct EncodeSizeValue
 {
+	static size_t EncodedWidth(size_t inSize)
+	{
+		return EncodePrimitiveIntValue<size_t, _EndianType, _IsDestSigned>::
+			EncodedWidth(inSize);
+	}
+
+	template<typename _DestIt>
+	static _DestIt Encode(size_t inSize, _DestIt destIt)
+	{
+		return EncodePrimitiveIntValue<size_t, _EndianType, _IsDestSigned>::
+			Encode(inSize, destIt);
+	}
+
 	template<typename _CtnType>
 	static void Encode(_CtnType& res, size_t inSize)
 	{
@@ -94,86 +118,158 @@ struct EncodeSizeValue
 }; // struct EncodeSizeValue
 
 
-template<bool _IsValSigned>
+template<RlpEncTypeCat _RlpCat, bool _IsValSigned>
 struct EncodeRlpBytesImpl;
 
 template<>
-struct EncodeRlpBytesImpl<false>
+struct EncodeRlpBytesImpl<RlpEncTypeCat::Bytes, false>
 {
 	static constexpr bool sk_isValSigned = false;
 
 	template<typename _CtnType>
-	static _CtnType GenLeadingBytes(RlpEncTypeCat rlpCat, size_t byteSize)
+	static _CtnType GenLeadingBytes(size_t byteSize)
 	{
-		// Determine RlpEncodeType
-		switch (rlpCat)
+		if (byteSize <= 55)
 		{
-		case RlpEncTypeCat::Bytes:
+			// RlpEncodeType::BytesShort
+			_CtnType res;
+			res.push_back(static_cast<uint8_t>(0x80U + byteSize));
+			return res;
+		}
+		else
 		{
-			if (byteSize <= 55)
-			{
-				// RlpEncodeType::BytesShort
-				_CtnType res;
-				res.push_back(static_cast<uint8_t>(0x80U + byteSize));
-				return res;
-			}
-			else
-			{
-				// RlpEncodeType::BytesLong
-				_CtnType res;
-				res.push_back(0);
-				EncodeSizeValue<Endian::native, sk_isValSigned>::Encode(
-					res, byteSize);
-				res[0] = static_cast<uint8_t>(0xB7U + (res.size() - 1));
-				return res;
-			}
+			// RlpEncodeType::BytesLong
+			_CtnType res;
+			res.push_back(0);
+			EncodeSizeValue<Endian::native, sk_isValSigned>::Encode(
+				res, byteSize
+			);
+			res[0] = static_cast<uint8_t>(0xB7U + (res.size() - 1));
+			return res;
 		}
+	}
 
-		case RlpEncTypeCat::List:
+	static size_t CalcLeadingBytesSize(size_t byteSize)
+	{
+		if (byteSize <= 55)
 		{
-			if (byteSize <= 55)
-			{
-				// RlpEncodeType::ListShort
-				_CtnType res;
-				res.push_back(static_cast<uint8_t>(0xC0U + byteSize));
-				return res;
-			}
-			else
-			{
-				// RlpEncodeType::ListLong
-				_CtnType res;
-				res.push_back(0);
-				EncodeSizeValue<Endian::native, sk_isValSigned>::Encode(
-					res, byteSize);
-				res[0] = static_cast<uint8_t>(0xF7U + (res.size() - 1));
-				return res;
-			}
+			// RlpEncodeType::BytesShort
+			// 1 byte
+			return 1;
 		}
-
+		else
+		{
+			// RlpEncodeType::BytesLong
+			auto lenValSize =
+				EncodeSizeValue<Endian::native, sk_isValSigned>::
+					EncodedWidth(byteSize);
+			// 1 byte + lenValSize bytes
+			return 1 + lenValSize;
 		}
-
-		throw SerializeError("Unknown RLP encoding type category was given");
 	}
 
 	template<typename _CtnType, typename _OutConcatOp>
 	static _CtnType SerializeBytes(
-		RlpEncTypeCat rlpCat, const _CtnType& inBytes, _OutConcatOp concatOp)
+		const _CtnType& inBytes, _OutConcatOp concatOp
+	)
 	{
 		// Special case - if the input is just 1 byte
-		if ((rlpCat == RlpEncTypeCat::Bytes) &&
-			(inBytes.size() == 1) &&
-			(inBytes[0] <= 0x7FU))
+		if ((inBytes.size() == 1) && (inBytes[0] <= 0x7FU))
 		{
 			return inBytes;
 		}
 
-		auto leadBytes = GenLeadingBytes<_CtnType>(rlpCat, inBytes.size());
+		auto leadBytes = GenLeadingBytes<_CtnType>(inBytes.size());
 
 		concatOp(leadBytes, inBytes);
 
 		return leadBytes;
 	}
-}; // struct EncodeRlpBytesImpl
+
+	template<typename _ValType>
+	static size_t CalcSerializedSize(
+		size_t inBytesSize,
+		const _ValType* firstBytePtr
+	)
+	{
+		// Special case - if the input is just 1 byte
+		if ((inBytesSize == 1) && (*firstBytePtr <= 0x7FU))
+		{
+			return 1;
+		}
+
+		auto leadBytesSize = CalcLeadingBytesSize(inBytesSize);
+
+		return leadBytesSize + inBytesSize;
+	}
+}; // struct EncodeRlpBytesImpl<RlpEncTypeCat::Bytes, false>
+
+template<>
+struct EncodeRlpBytesImpl<RlpEncTypeCat::List, false>
+{
+	static constexpr bool sk_isValSigned = false;
+
+	template<typename _CtnType>
+	static _CtnType GenLeadingBytes(size_t byteSize)
+	{
+		if (byteSize <= 55)
+		{
+			// RlpEncodeType::ListShort
+			_CtnType res;
+			res.push_back(static_cast<uint8_t>(0xC0U + byteSize));
+			return res;
+		}
+		else
+		{
+			// RlpEncodeType::ListLong
+			_CtnType res;
+			res.push_back(0);
+			EncodeSizeValue<Endian::native, sk_isValSigned>::Encode(
+				res, byteSize
+			);
+			res[0] = static_cast<uint8_t>(0xF7U + (res.size() - 1));
+			return res;
+		}
+	}
+
+	static size_t CalcLeadingBytesSize(size_t byteSize)
+	{
+		if (byteSize <= 55)
+		{
+			// RlpEncodeType::ListShort
+			// 1 byte
+			return 1;
+		}
+		else
+		{
+			// RlpEncodeType::ListLong
+			auto lenValSize =
+				EncodeSizeValue<Endian::native, sk_isValSigned>::
+					EncodedWidth(byteSize);
+			// 1 byte + lenValSize bytes
+			return 1 + lenValSize;
+		}
+	}
+
+	template<typename _CtnType, typename _OutConcatOp>
+	static _CtnType SerializeBytes(
+		const _CtnType& inBytes, _OutConcatOp concatOp
+	)
+	{
+		auto leadBytes = GenLeadingBytes<_CtnType>(inBytes.size());
+
+		concatOp(leadBytes, inBytes);
+
+		return leadBytes;
+	}
+
+	static size_t CalcSerializedSize(size_t inBytesSize)
+	{
+		auto leadBytesSize = CalcLeadingBytesSize(inBytesSize);
+
+		return leadBytesSize + inBytesSize;
+	}
+}; // struct EncodeRlpBytesImpl<RlpEncTypeCat::List, false>
 
 } // namespace Internal
 
@@ -199,14 +295,59 @@ struct EncodeRlpBytesImpl<false>
  *
  * @return serialized bytes encoded in RLP
  */
-template<typename _CtnType, typename _OutConcatOp>
-inline _CtnType SerializeBytes(
-	RlpEncTypeCat rlpCat, const _CtnType& inBytes, _OutConcatOp concatOp)
+template<RlpEncTypeCat _RlpCat, typename _CtnType, typename _OutConcatOp>
+inline _CtnType SerializeBytes(const _CtnType& inBytes, _OutConcatOp concatOp)
 {
 	using _DestValType = typename _CtnType::value_type;
 	return Internal::EncodeRlpBytesImpl<
-		std::numeric_limits<_DestValType>::is_signed>::SerializeBytes(
-			rlpCat, inBytes, concatOp);
+		_RlpCat,
+		std::numeric_limits<_DestValType>::is_signed
+	>::SerializeBytes(inBytes, concatOp);
 }
+
+// template<typename _CtnType, typename _OutConcatOp>
+// inline _CtnType SerializeBytes(
+// 	RlpEncTypeCat rlpCat, const _CtnType& inBytes, _OutConcatOp concatOp
+// )
+// {
+// 	switch (rlpCat)
+// 	{
+// 	case RlpEncTypeCat::Bytes:
+// 		return SerializeBytes<RlpEncTypeCat::Bytes>(inBytes, concatOp);
+// 	case RlpEncTypeCat::List:
+// 		return SerializeBytes<RlpEncTypeCat::List>(inBytes, concatOp);
+// 	default:
+// 		throw SerializeError("Invalid RLP encoding type");
+// 	}
+// }
+
+template<RlpEncTypeCat _RlpCat>
+struct SerializedSize;
+
+template<>
+struct SerializedSize<RlpEncTypeCat::Bytes>
+{
+	template<typename _ValType>
+	static size_t Calc(size_t inBytesSize, const _ValType* firstBytePtr)
+	{
+		return Internal::EncodeRlpBytesImpl<
+			RlpEncTypeCat::Bytes,
+			std::numeric_limits<_ValType>::is_signed
+		>::CalcSerializedSize(inBytesSize, firstBytePtr);
+	}
+}; // struct SerializedSize<RlpEncTypeCat::Bytes>
+
+template<>
+struct SerializedSize<RlpEncTypeCat::List>
+{
+	template<typename _ValType>
+	static size_t Calc(size_t inBytesSize)
+	{
+		return Internal::EncodeRlpBytesImpl<
+			RlpEncTypeCat::List,
+			std::numeric_limits<_ValType>::is_signed
+		>::CalcSerializedSize(inBytesSize);
+	}
+}; // struct SerializedSize<RlpEncTypeCat::List>
 
 } // namespace SimpleRlp

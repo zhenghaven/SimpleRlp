@@ -5,6 +5,9 @@
 
 #include <gtest/gtest.h>
 
+#ifdef _MSC_VER
+#include <windows.h>
+#endif // _MSC_VER
 #include <SimpleRlp/SimpleRlp.hpp>
 
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE
@@ -178,6 +181,9 @@ GTEST_TEST(TestStaticDictParser, TestStaticDict1_Short)
 	auto actRlp = WriteRlp(expObj);
 	EXPECT_EQ(actRlp, expRlp);
 
+	auto rlpSize = CalcRlpSize(expObj);
+	EXPECT_EQ(rlpSize, expRlp.size());
+
 	auto actObj = TestStaticDict1Parser().Parse(expRlp);
 	EXPECT_EQ(actObj.get_Key1_1(), expObj.get_Key1_1());
 	EXPECT_EQ(actObj.get_Key1_2(), expObj.get_Key1_2());
@@ -215,6 +221,9 @@ GTEST_TEST(TestStaticDictParser, TestStaticDict1_Long)
 	});
 	auto actRlp = WriteRlp(expObj);
 	EXPECT_EQ(actRlp, expRlp);
+
+	auto rlpSize = CalcRlpSize(expObj);
+	EXPECT_EQ(rlpSize, expRlp.size());
 
 	auto actObj = TestStaticDict1Parser().Parse(expRlp);
 	EXPECT_EQ(actObj.get_Key1_1(), expObj.get_Key1_1());
@@ -445,6 +454,9 @@ GTEST_TEST(TestStaticDictParser, TestStaticDict2)
 	});
 	auto actRlp = WriteRlp(expObj);
 	EXPECT_EQ(actRlp, expRlp);
+
+	auto rlpSize = CalcRlpSize(expObj);
+	EXPECT_EQ(rlpSize, expRlp.size());
 
 	auto actObj = TestStaticDict2Parser().Parse(expRlp);
 	EXPECT_EQ(actObj.get_Key2_1(), expObj.get_Key2_1());

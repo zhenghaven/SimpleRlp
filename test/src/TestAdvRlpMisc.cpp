@@ -5,6 +5,9 @@
 
 #include <gtest/gtest.h>
 
+#ifdef _MSC_VER
+#include <windows.h>
+#endif // _MSC_VER
 #include <AdvancedRlp/CatId.hpp>
 #include <AdvancedRlp/ParserUtils.hpp>
 #include <AdvancedRlp/WriterUtils.hpp>

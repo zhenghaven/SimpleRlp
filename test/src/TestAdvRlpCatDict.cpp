@@ -5,6 +5,9 @@
 
 #include <gtest/gtest.h>
 
+#ifdef _MSC_VER
+#include <windows.h>
+#endif // _MSC_VER
 #include <AdvancedRlp/AdvancedRlp.hpp>
 
 #ifndef ADVANCEDRLP_CUSTOMIZED_NAMESPACE
@@ -313,6 +316,24 @@ GTEST_TEST(TestAdvRlpCatDict, Parser)
 
 		auto actOut = CatDictParser().Parse(input);
 		EXPECT_EQ(expOut, actOut);
+	}
+	{
+		auto input = GetExpectedAdvRlp();
+		auto expOut = GetExpectedObj();
+
+		auto actOut = GenericParser().Parse(input);
+		EXPECT_NO_THROW(
+			EXPECT_EQ(expOut.AsDict(), actOut.AsDict());
+		);
+	}
+	{
+		auto input = GetExpectedAdvRlp();
+		auto expOut = GetExpectedObj();
+
+		auto actOut = Parse(input);
+		EXPECT_NO_THROW(
+			EXPECT_EQ(expOut.AsDict(), actOut.AsDict());
+		);
 	}
 }
 

@@ -64,7 +64,7 @@ struct SolveSignedness
 		if (Internal::SimRlp::Internal::Obj::Internal::
 			RealNumCompare<_UIntType, _IntType>::Greater(
 				val,
-				std::numeric_limits<_IntType>::max()))
+				(std::numeric_limits<_IntType>::max)()))
 		{
 			throw ParseError("The integer received exceeds the range of the"
 				" targeting signed integer", pos);
@@ -542,22 +542,22 @@ struct CatIntegerWriterImpl
 
 		// 3.build RLP list
 		specs = Internal::SimRlp::
-			SerializeBytes(
-				Internal::SimRlp::RlpEncTypeCat::Bytes,
+			SerializeBytes<Internal::SimRlp::RlpEncTypeCat::Bytes>(
 				specs,
-				ccntr);
+				ccntr
+			);
 		rawData = Internal::SimRlp::
-			SerializeBytes(
-				Internal::SimRlp::RlpEncTypeCat::Bytes,
+			SerializeBytes<Internal::SimRlp::RlpEncTypeCat::Bytes>(
 				rawData,
-				ccntr);
+				ccntr
+			);
 		ccntr(specs, rawData);
 
 		return Internal::SimRlp::
-			SerializeBytes(
-				Internal::SimRlp::RlpEncTypeCat::List,
+			SerializeBytes<Internal::SimRlp::RlpEncTypeCat::List>(
 				specs,
-				ccntr);
+				ccntr
+			);
 	}
 
 }; // struct CatIntegerWriterImpl

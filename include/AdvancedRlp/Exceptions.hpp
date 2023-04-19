@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <SimpleObjects/Exception.hpp>
+
 #include "../SimpleRlp/Internal/SimpleObjects.hpp"
 
 #include "Internal/SimpleRlp.hpp"

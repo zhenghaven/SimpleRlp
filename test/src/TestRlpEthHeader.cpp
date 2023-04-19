@@ -5,6 +5,9 @@
 
 #include <gtest/gtest.h>
 
+#ifdef _MSC_VER
+#include <windows.h>
+#endif // _MSC_VER
 #include <SimpleRlp/SimpleRlp.hpp>
 
 #ifndef SIMPLERLP_CUSTOMIZED_NAMESPACE
@@ -27,7 +30,7 @@ GTEST_TEST(TestRlpEthHeader, CountTestFile)
 namespace
 {
 
-static constexpr uint8_t sk_ethHeaders_00[] =
+static constexpr uint8_t sk_ethHeaders_Mainnet_00[] =
 {
 	// sizeSize: 2 bytes, size: 532, total: 1 + 2 + 532 = 535
 	0XF9U, 0X02U, 0X14U,
@@ -107,7 +110,7 @@ static constexpr uint8_t sk_ethHeaders_00[] =
 			0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X42U,
 };
 
-static constexpr uint8_t sk_ethHeaders_01[] =
+static constexpr uint8_t sk_ethHeaders_Mainnet_01[] =
 {
 	// sizeSize: 2 bytes, size: 529, total: 1 + 2 + 529 = 532
 	0XF9U, 0X02U, 0X11U, 0XA0U, 0XD4U, 0XE5U, 0X67U, 0X40U, 0XF8U, 0X76U,
@@ -166,7 +169,7 @@ static constexpr uint8_t sk_ethHeaders_01[] =
 	0X1EU, 0XC4U,
 };
 
-static constexpr uint8_t sk_ethHeaders_12965001[] =
+static constexpr uint8_t sk_ethHeaders_Mainnet_12965001[] =
 {
 	0XF9U, 0X02U, 0X1AU, 0XA0U, 0X9BU, 0X83U, 0XC1U, 0X2CU, 0X69U, 0XEDU,
 	0XB7U, 0X4FU, 0X6CU, 0X8DU, 0XD5U, 0XD0U, 0X52U, 0X76U, 0X5CU, 0X1AU,
@@ -225,7 +228,46 @@ static constexpr uint8_t sk_ethHeaders_12965001[] =
 	0X8EU,
 };
 
-EthHeader BuildEthHeader_00()
+static constexpr uint8_t sk_ethHeaders_Testnet_8780090[] =
+{
+	0XF9U, 0X02U, 0X2CU, 0XA0U, 0X61U, 0X50U, 0XCCU, 0XB7U, 0X0BU, 0X77U, 0X94U, 0X96U, 0X97U, 0X12U, 0X97U, 0X34U,
+	0XA8U, 0X33U, 0X6AU, 0X91U, 0X98U, 0XD8U, 0X66U, 0X76U, 0X8BU, 0X8CU, 0XADU, 0X55U, 0X48U, 0XE1U, 0XB6U, 0X7AU,
+	0X23U, 0XB6U, 0X98U, 0XFDU, 0XA0U, 0X1DU, 0XCCU, 0X4DU, 0XE8U, 0XDEU, 0XC7U, 0X5DU, 0X7AU, 0XABU, 0X85U, 0XB5U,
+	0X67U, 0XB6U, 0XCCU, 0XD4U, 0X1AU, 0XD3U, 0X12U, 0X45U, 0X1BU, 0X94U, 0X8AU, 0X74U, 0X13U, 0XF0U, 0XA1U, 0X42U,
+	0XFDU, 0X40U, 0XD4U, 0X93U, 0X47U, 0X94U, 0X4DU, 0X49U, 0X6CU, 0XCCU, 0X28U, 0X05U, 0X8BU, 0X1DU, 0X74U, 0XB7U,
+	0XA1U, 0X95U, 0X41U, 0X66U, 0X3EU, 0X21U, 0X15U, 0X4FU, 0X9CU, 0X84U, 0XA0U, 0X1DU, 0X21U, 0X11U, 0XECU, 0XABU,
+	0XCBU, 0X5FU, 0X32U, 0XFAU, 0XDAU, 0X9FU, 0X4CU, 0X09U, 0X95U, 0XCDU, 0X69U, 0X99U, 0X09U, 0X27U, 0XEBU, 0XACU,
+	0X02U, 0X7DU, 0XBDU, 0X2CU, 0X84U, 0XFCU, 0XB0U, 0X3EU, 0XFFU, 0X5BU, 0X46U, 0XA0U, 0X28U, 0XB4U, 0X8CU, 0XC3U,
+	0X3BU, 0X47U, 0X70U, 0X98U, 0XE0U, 0X9AU, 0X0AU, 0X1FU, 0XEFU, 0X53U, 0X3DU, 0XF2U, 0X9EU, 0X2DU, 0X38U, 0X29U,
+	0XC2U, 0XEEU, 0X32U, 0X0CU, 0XB4U, 0X10U, 0XA2U, 0XC4U, 0X98U, 0X60U, 0X84U, 0XFFU, 0XA0U, 0XEAU, 0X2EU, 0X33U,
+	0X32U, 0X96U, 0XA8U, 0X7DU, 0XB2U, 0X3EU, 0X69U, 0X45U, 0XDEU, 0X8AU, 0X1DU, 0X19U, 0XDEU, 0X4AU, 0X7FU, 0X80U,
+	0XE1U, 0X36U, 0X82U, 0X01U, 0XEDU, 0XA1U, 0XAEU, 0X26U, 0XFFU, 0X02U, 0X01U, 0XE2U, 0XA6U, 0XB9U, 0X01U, 0X00U,
+	0X36U, 0XE4U, 0X04U, 0X65U, 0X40U, 0X01U, 0X74U, 0X0CU, 0X60U, 0X13U, 0X40U, 0XB4U, 0X86U, 0X10U, 0X60U, 0X98U,
+	0X10U, 0XA9U, 0XCCU, 0X00U, 0XAAU, 0X01U, 0X48U, 0X12U, 0X01U, 0X01U, 0X08U, 0X50U, 0XC8U, 0XB5U, 0X40U, 0X10U,
+	0X09U, 0XA2U, 0X64U, 0X60U, 0X42U, 0X13U, 0X22U, 0X20U, 0X14U, 0XD2U, 0X01U, 0X28U, 0X31U, 0XC4U, 0X00U, 0X96U,
+	0X48U, 0XA0U, 0X21U, 0X19U, 0XC3U, 0X42U, 0XD8U, 0X62U, 0X91U, 0X0CU, 0X1AU, 0X0CU, 0X40U, 0X34U, 0X27U, 0X49U,
+	0X00U, 0XC8U, 0X48U, 0X1AU, 0X04U, 0XF5U, 0X60U, 0XD1U, 0X4AU, 0X10U, 0X63U, 0X3EU, 0X82U, 0X2DU, 0X13U, 0X20U,
+	0X04U, 0X06U, 0XD4U, 0X51U, 0X63U, 0X20U, 0XB8U, 0X58U, 0XA8U, 0X53U, 0XC1U, 0XC7U, 0X82U, 0XE0U, 0X20U, 0X01U,
+	0X16U, 0X04U, 0X98U, 0X0CU, 0X12U, 0XA6U, 0X80U, 0XC0U, 0X08U, 0X6AU, 0X16U, 0XA4U, 0XC6U, 0X1CU, 0XABU, 0X08U,
+	0XACU, 0X88U, 0X08U, 0X00U, 0X44U, 0X40U, 0X40U, 0X51U, 0XA8U, 0X3EU, 0X10U, 0X18U, 0XA2U, 0X90U, 0X10U, 0X19U,
+	0X13U, 0X82U, 0X24U, 0XE7U, 0X50U, 0XA1U, 0XA0U, 0X4EU, 0XA5U, 0X41U, 0X08U, 0X24U, 0X8AU, 0X32U, 0XA0U, 0X03U,
+	0X0AU, 0X01U, 0X39U, 0X09U, 0X2EU, 0X1DU, 0X02U, 0X8CU, 0XC0U, 0X0FU, 0X63U, 0X42U, 0X15U, 0X62U, 0XD0U, 0X41U,
+	0X26U, 0X2CU, 0X68U, 0XCEU, 0X50U, 0X00U, 0X02U, 0X90U, 0X60U, 0X02U, 0X11U, 0X26U, 0X70U, 0X08U, 0X12U, 0X04U,
+	0X22U, 0X48U, 0X32U, 0X07U, 0X2AU, 0X04U, 0X0BU, 0X00U, 0XC1U, 0X1CU, 0X89U, 0X4FU, 0X42U, 0X68U, 0XC4U, 0XF2U,
+	0XECU, 0X24U, 0X70U, 0X33U, 0X00U, 0X00U, 0XEEU, 0X1DU, 0X06U, 0X04U, 0X04U, 0X59U, 0X45U, 0X03U, 0XE5U, 0X14U,
+	0X00U, 0X8CU, 0X10U, 0X4DU, 0X20U, 0XA1U, 0X26U, 0X32U, 0X21U, 0X97U, 0X34U, 0X30U, 0X0AU, 0X06U, 0X69U, 0XA4U,
+	0X10U, 0X55U, 0X10U, 0X65U, 0X01U, 0XB1U, 0X92U, 0X14U, 0XA0U, 0X24U, 0XC1U, 0X28U, 0XA4U, 0X20U, 0X60U, 0X08U,
+	0X83U, 0XA0U, 0XB2U, 0X1EU, 0X4BU, 0X99U, 0X22U, 0X50U, 0X12U, 0X42U, 0X41U, 0X12U, 0X0AU, 0X04U, 0X40U, 0X11U,
+	0X80U, 0X83U, 0X85U, 0XF9U, 0X3AU, 0X84U, 0X01U, 0XC9U, 0XC3U, 0X80U, 0X83U, 0XF1U, 0X14U, 0X3CU, 0X84U, 0X64U,
+	0X2DU, 0XE3U, 0X84U, 0X8AU, 0X4EU, 0X65U, 0X74U, 0X68U, 0X65U, 0X72U, 0X6DU, 0X69U, 0X6EU, 0X64U, 0XA0U, 0X62U,
+	0X06U, 0XFAU, 0XECU, 0X3EU, 0X9CU, 0X5FU, 0X68U, 0X17U, 0XA5U, 0XEEU, 0XA2U, 0XADU, 0X3CU, 0XBCU, 0X9FU, 0X7AU,
+	0X85U, 0X9DU, 0XCFU, 0X1DU, 0X96U, 0XD3U, 0X94U, 0X01U, 0X85U, 0XE8U, 0X0EU, 0X16U, 0XF9U, 0X50U, 0X9CU, 0X88U,
+	0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X85U, 0X05U, 0X5AU, 0X0BU, 0XBDU, 0X76U, 0XA0U, 0X89U,
+	0X6CU, 0X65U, 0X34U, 0X7BU, 0XE2U, 0XAEU, 0XEDU, 0XB1U, 0X72U, 0X07U, 0X36U, 0XB3U, 0X72U, 0X94U, 0X4DU, 0X3DU,
+	0XE5U, 0X03U, 0XCEU, 0X3AU, 0X31U, 0X52U, 0X87U, 0X5CU, 0X7FU, 0X4BU, 0X20U, 0XE3U, 0X46U, 0X85U, 0X47U,
+};
+
+EthHeader BuildEthHeader_Mainnet_00()
 {
 	EthHeader header;
 	header.get_ParentHash() = SimpleObjects::Bytes({
@@ -321,13 +363,13 @@ EthHeader BuildEthHeader_00()
 	return header;
 }
 
-const EthHeader& GetEthHeader_00()
+const EthHeader& GetEthHeader_Mainnet_00()
 {
-	static EthHeader header = BuildEthHeader_00();
+	static EthHeader header = BuildEthHeader_Mainnet_00();
 	return header;
 }
 
-EthHeader BuildEthHeader_01()
+EthHeader BuildEthHeader_Mainnet_01()
 {
 	EthHeader header;
 	header.get_ParentHash() = SimpleObjects::Bytes({
@@ -424,13 +466,13 @@ EthHeader BuildEthHeader_01()
 	return header;
 }
 
-const EthHeader& GetEthHeader_01()
+const EthHeader& GetEthHeader_Mainnet_01()
 {
-	static EthHeader header = BuildEthHeader_01();
+	static EthHeader header = BuildEthHeader_Mainnet_01();
 	return header;
 }
 
-EthHeader BuildEthHeader_12965001()
+EthHeader BuildEthHeader_Mainnet_12965001()
 {
 	EthHeader header;
 	header.get_ParentHash() = SimpleObjects::Bytes({
@@ -530,24 +572,129 @@ EthHeader BuildEthHeader_12965001()
 	return header;
 }
 
-const EthHeader& GetEthHeader_12965001()
+const EthHeader& GetEthHeader_Mainnet_12965001()
 {
-	static EthHeader header = BuildEthHeader_12965001();
+	static EthHeader header = BuildEthHeader_Mainnet_12965001();
+	return header;
+}
+
+EthHeader BuildEthHeader_Testnet_8780090()
+{
+	EthHeader header;
+	// 01.
+	header.get_ParentHash() = SimpleObjects::Bytes({
+		0X61U, 0X50U, 0XCCU, 0XB7U, 0X0BU, 0X77U, 0X94U, 0X96U, 0X97U, 0X12U, 0X97U, 0X34U, 0XA8U, 0X33U, 0X6AU, 0X91U,
+		0X98U, 0XD8U, 0X66U, 0X76U, 0X8BU, 0X8CU, 0XADU, 0X55U, 0X48U, 0XE1U, 0XB6U, 0X7AU, 0X23U, 0XB6U, 0X98U, 0XFDU,
+	});
+	// 02.
+	header.get_Sha3Uncles() = SimpleObjects::Bytes({
+		0X1DU, 0XCCU, 0X4DU, 0XE8U, 0XDEU, 0XC7U, 0X5DU, 0X7AU, 0XABU, 0X85U, 0XB5U, 0X67U, 0XB6U, 0XCCU, 0XD4U, 0X1AU,
+		0XD3U, 0X12U, 0X45U, 0X1BU, 0X94U, 0X8AU, 0X74U, 0X13U, 0XF0U, 0XA1U, 0X42U, 0XFDU, 0X40U, 0XD4U, 0X93U, 0X47U,
+	});
+	// 03.
+	header.get_Miner() = SimpleObjects::Bytes({
+		0X4DU, 0X49U, 0X6CU, 0XCCU, 0X28U, 0X05U, 0X8BU, 0X1DU, 0X74U, 0XB7U, 0XA1U, 0X95U, 0X41U, 0X66U, 0X3EU, 0X21U,
+		0X15U, 0X4FU, 0X9CU, 0X84U,
+	});
+	// 04.
+	header.get_StateRoot() = SimpleObjects::Bytes({
+		0X1DU, 0X21U, 0X11U, 0XECU, 0XABU, 0XCBU, 0X5FU, 0X32U, 0XFAU, 0XDAU, 0X9FU, 0X4CU, 0X09U, 0X95U, 0XCDU, 0X69U,
+		0X99U, 0X09U, 0X27U, 0XEBU, 0XACU, 0X02U, 0X7DU, 0XBDU, 0X2CU, 0X84U, 0XFCU, 0XB0U, 0X3EU, 0XFFU, 0X5BU, 0X46U,
+	});
+	// 05.
+	header.get_TransactionsRoot() = SimpleObjects::Bytes({
+		0X28U, 0XB4U, 0X8CU, 0XC3U, 0X3BU, 0X47U, 0X70U, 0X98U, 0XE0U, 0X9AU, 0X0AU, 0X1FU, 0XEFU, 0X53U, 0X3DU, 0XF2U,
+		0X9EU, 0X2DU, 0X38U, 0X29U, 0XC2U, 0XEEU, 0X32U, 0X0CU, 0XB4U, 0X10U, 0XA2U, 0XC4U, 0X98U, 0X60U, 0X84U, 0XFFU,
+	});
+	// 06.
+	header.get_ReceiptsRoot() = SimpleObjects::Bytes({
+		0XEAU, 0X2EU, 0X33U, 0X32U, 0X96U, 0XA8U, 0X7DU, 0XB2U, 0X3EU, 0X69U, 0X45U, 0XDEU, 0X8AU, 0X1DU, 0X19U, 0XDEU,
+		0X4AU, 0X7FU, 0X80U, 0XE1U, 0X36U, 0X82U, 0X01U, 0XEDU, 0XA1U, 0XAEU, 0X26U, 0XFFU, 0X02U, 0X01U, 0XE2U, 0XA6U,
+	});
+	// 07.
+	header.get_LogsBloom() = SimpleObjects::Bytes({
+		0X36U, 0XE4U, 0X04U, 0X65U, 0X40U, 0X01U, 0X74U, 0X0CU, 0X60U, 0X13U, 0X40U, 0XB4U, 0X86U, 0X10U, 0X60U, 0X98U,
+		0X10U, 0XA9U, 0XCCU, 0X00U, 0XAAU, 0X01U, 0X48U, 0X12U, 0X01U, 0X01U, 0X08U, 0X50U, 0XC8U, 0XB5U, 0X40U, 0X10U,
+		0X09U, 0XA2U, 0X64U, 0X60U, 0X42U, 0X13U, 0X22U, 0X20U, 0X14U, 0XD2U, 0X01U, 0X28U, 0X31U, 0XC4U, 0X00U, 0X96U,
+		0X48U, 0XA0U, 0X21U, 0X19U, 0XC3U, 0X42U, 0XD8U, 0X62U, 0X91U, 0X0CU, 0X1AU, 0X0CU, 0X40U, 0X34U, 0X27U, 0X49U,
+		0X00U, 0XC8U, 0X48U, 0X1AU, 0X04U, 0XF5U, 0X60U, 0XD1U, 0X4AU, 0X10U, 0X63U, 0X3EU, 0X82U, 0X2DU, 0X13U, 0X20U,
+		0X04U, 0X06U, 0XD4U, 0X51U, 0X63U, 0X20U, 0XB8U, 0X58U, 0XA8U, 0X53U, 0XC1U, 0XC7U, 0X82U, 0XE0U, 0X20U, 0X01U,
+		0X16U, 0X04U, 0X98U, 0X0CU, 0X12U, 0XA6U, 0X80U, 0XC0U, 0X08U, 0X6AU, 0X16U, 0XA4U, 0XC6U, 0X1CU, 0XABU, 0X08U,
+		0XACU, 0X88U, 0X08U, 0X00U, 0X44U, 0X40U, 0X40U, 0X51U, 0XA8U, 0X3EU, 0X10U, 0X18U, 0XA2U, 0X90U, 0X10U, 0X19U,
+		0X13U, 0X82U, 0X24U, 0XE7U, 0X50U, 0XA1U, 0XA0U, 0X4EU, 0XA5U, 0X41U, 0X08U, 0X24U, 0X8AU, 0X32U, 0XA0U, 0X03U,
+		0X0AU, 0X01U, 0X39U, 0X09U, 0X2EU, 0X1DU, 0X02U, 0X8CU, 0XC0U, 0X0FU, 0X63U, 0X42U, 0X15U, 0X62U, 0XD0U, 0X41U,
+		0X26U, 0X2CU, 0X68U, 0XCEU, 0X50U, 0X00U, 0X02U, 0X90U, 0X60U, 0X02U, 0X11U, 0X26U, 0X70U, 0X08U, 0X12U, 0X04U,
+		0X22U, 0X48U, 0X32U, 0X07U, 0X2AU, 0X04U, 0X0BU, 0X00U, 0XC1U, 0X1CU, 0X89U, 0X4FU, 0X42U, 0X68U, 0XC4U, 0XF2U,
+		0XECU, 0X24U, 0X70U, 0X33U, 0X00U, 0X00U, 0XEEU, 0X1DU, 0X06U, 0X04U, 0X04U, 0X59U, 0X45U, 0X03U, 0XE5U, 0X14U,
+		0X00U, 0X8CU, 0X10U, 0X4DU, 0X20U, 0XA1U, 0X26U, 0X32U, 0X21U, 0X97U, 0X34U, 0X30U, 0X0AU, 0X06U, 0X69U, 0XA4U,
+		0X10U, 0X55U, 0X10U, 0X65U, 0X01U, 0XB1U, 0X92U, 0X14U, 0XA0U, 0X24U, 0XC1U, 0X28U, 0XA4U, 0X20U, 0X60U, 0X08U,
+		0X83U, 0XA0U, 0XB2U, 0X1EU, 0X4BU, 0X99U, 0X22U, 0X50U, 0X12U, 0X42U, 0X41U, 0X12U, 0X0AU, 0X04U, 0X40U, 0X11U,
+	});
+	// 08.
+	header.get_Difficulty() = SimpleObjects::Bytes({
+	});
+	// 09.
+	header.get_Number() = SimpleObjects::Bytes({
+		0X85U, 0XF9U, 0X3AU,
+	});
+	// 10.
+	header.get_GasLimit() = SimpleObjects::Bytes({
+		0X01U, 0XC9U, 0XC3U, 0X80U,
+	});
+	// 11.
+	header.get_GasUsed() = SimpleObjects::Bytes({
+		0XF1U, 0X14U, 0X3CU,
+	});
+	// 12.
+	header.get_Timestamp() = SimpleObjects::Bytes({
+		0X64U, 0X2DU, 0XE3U, 0X84U,
+	});
+	// 13.
+	header.get_ExtraData() = SimpleObjects::Bytes({
+		0X4EU, 0X65U, 0X74U, 0X68U, 0X65U, 0X72U, 0X6DU, 0X69U, 0X6EU, 0X64U,
+	});
+	// 14.
+	header.get_MixHash() = SimpleObjects::Bytes({
+		0X62U, 0X06U, 0XFAU, 0XECU, 0X3EU, 0X9CU, 0X5FU, 0X68U, 0X17U, 0XA5U, 0XEEU, 0XA2U, 0XADU, 0X3CU, 0XBCU, 0X9FU,
+		0X7AU, 0X85U, 0X9DU, 0XCFU, 0X1DU, 0X96U, 0XD3U, 0X94U, 0X01U, 0X85U, 0XE8U, 0X0EU, 0X16U, 0XF9U, 0X50U, 0X9CU,
+	});
+	// 15.
+	header.get_Nonce() = SimpleObjects::Bytes({
+		0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U, 0X00U,
+	});
+	// 16.
+	header.get_BaseFee() = SimpleObjects::Bytes({
+		0X05U, 0X5AU, 0X0BU, 0XBDU, 0X76U,
+	});
+	// 17.
+	header.get_WithdrawalsHash() = SimpleObjects::Bytes({
+		0X89U, 0X6CU, 0X65U, 0X34U, 0X7BU, 0XE2U, 0XAEU, 0XEDU, 0XB1U, 0X72U, 0X07U, 0X36U, 0XB3U, 0X72U, 0X94U, 0X4DU,
+		0X3DU, 0XE5U, 0X03U, 0XCEU, 0X3AU, 0X31U, 0X52U, 0X87U, 0X5CU, 0X7FU, 0X4BU, 0X20U, 0XE3U, 0X46U, 0X85U, 0X47U,
+	});
+
+	return header;
+}
+
+const EthHeader& GetEthHeader_Testnet_8780090()
+{
+	static EthHeader header = BuildEthHeader_Testnet_8780090();
 	return header;
 }
 
 } // namespace
 
-GTEST_TEST(TestRlpEthHeader, EthHeader_00)
+GTEST_TEST(TestRlpEthHeader, EthHeader_Mainnet_00)
 {
-	const auto& header = GetEthHeader_00();
+	const auto& header = GetEthHeader_Mainnet_00();
 	auto headerExpRlp = std::vector<uint8_t>(
-			std::begin(sk_ethHeaders_00), std::end(sk_ethHeaders_00));
+		std::begin(sk_ethHeaders_Mainnet_00),
+		std::end(sk_ethHeaders_Mainnet_00)
+	);
 
 	// Check writer
 	auto headerActRlp = WriteRlp(header);
 	EXPECT_NE(headerActRlp, headerExpRlp);
-	headerActRlp = WriterGeneric::StaticDictWriter::Write(header, 1);
+	headerActRlp = WriterGeneric::StaticDictWriter::Write(header, 3);
 	EXPECT_EQ(headerActRlp, headerExpRlp);
 
 	// Check Parser
@@ -569,16 +716,18 @@ GTEST_TEST(TestRlpEthHeader, EthHeader_00)
 	EXPECT_EQ(headerActObj.get_Nonce(),            header.get_Nonce());
 }
 
-GTEST_TEST(TestRlpEthHeader, EthHeader_01)
+GTEST_TEST(TestRlpEthHeader, EthHeader_Mainnet_01)
 {
-	const auto& header = GetEthHeader_01();
+	const auto& header = GetEthHeader_Mainnet_01();
 	auto headerExpRlp = std::vector<uint8_t>(
-			std::begin(sk_ethHeaders_01), std::end(sk_ethHeaders_01));
+		std::begin(sk_ethHeaders_Mainnet_01),
+		std::end(sk_ethHeaders_Mainnet_01)
+	);
 
 	// Check writer
 	auto headerActRlp = WriteRlp(header);
 	EXPECT_NE(headerActRlp, headerExpRlp);
-	headerActRlp = WriterGeneric::StaticDictWriter::Write(header, 1);
+	headerActRlp = WriterGeneric::StaticDictWriter::Write(header, 3);
 	EXPECT_EQ(headerActRlp, headerExpRlp);
 
 	// Check Parser
@@ -600,15 +749,18 @@ GTEST_TEST(TestRlpEthHeader, EthHeader_01)
 	EXPECT_EQ(headerActObj.get_Nonce(),            header.get_Nonce());
 }
 
-GTEST_TEST(TestRlpEthHeader, EthHeader_12965001)
+GTEST_TEST(TestRlpEthHeader, EthHeader_Mainnet_12965001)
 {
-	const auto& header = GetEthHeader_12965001();
+	const auto& header = GetEthHeader_Mainnet_12965001();
 	auto headerExpRlp = std::vector<uint8_t>(
-			std::begin(sk_ethHeaders_12965001),
-			std::end(sk_ethHeaders_12965001));
+		std::begin(sk_ethHeaders_Mainnet_12965001),
+		std::end(sk_ethHeaders_Mainnet_12965001)
+	);
 
 	// Check writer
 	auto headerActRlp = WriteRlp(header);
+	EXPECT_NE(headerActRlp, headerExpRlp);
+	headerActRlp = WriterGeneric::StaticDictWriter::Write(header, 2);
 	EXPECT_EQ(headerActRlp, headerExpRlp);
 
 	// Check Parser
@@ -629,4 +781,39 @@ GTEST_TEST(TestRlpEthHeader, EthHeader_12965001)
 	EXPECT_EQ(headerActObj.get_MixHash(),          header.get_MixHash());
 	EXPECT_EQ(headerActObj.get_Nonce(),            header.get_Nonce());
 	EXPECT_EQ(headerActObj.get_BaseFee(),          header.get_BaseFee());
+}
+
+GTEST_TEST(TestRlpEthHeader, EthHeader_Testnet_8780090)
+{
+	const auto& header = GetEthHeader_Testnet_8780090();
+	auto headerExpRlp = std::vector<uint8_t>(
+		std::begin(sk_ethHeaders_Testnet_8780090),
+		std::end(sk_ethHeaders_Testnet_8780090)
+	);
+
+	// Check writer
+	auto headerActRlp = WriteRlp(header);
+	EXPECT_NE(headerActRlp, headerExpRlp);
+	headerActRlp = WriterGeneric::StaticDictWriter::Write(header, 1);
+	EXPECT_EQ(headerActRlp, headerExpRlp);
+
+	// Check Parser
+	auto headerActObj = EthHeaderParser().Parse(headerExpRlp);
+	EXPECT_EQ(headerActObj.get_ParentHash(),       header.get_ParentHash());
+	EXPECT_EQ(headerActObj.get_Sha3Uncles(),       header.get_Sha3Uncles());
+	EXPECT_EQ(headerActObj.get_Miner(),            header.get_Miner());
+	EXPECT_EQ(headerActObj.get_StateRoot(),        header.get_StateRoot());
+	EXPECT_EQ(headerActObj.get_TransactionsRoot(), header.get_TransactionsRoot());
+	EXPECT_EQ(headerActObj.get_ReceiptsRoot(),     header.get_ReceiptsRoot());
+	EXPECT_EQ(headerActObj.get_LogsBloom(),        header.get_LogsBloom());
+	EXPECT_EQ(headerActObj.get_Difficulty(),       header.get_Difficulty());
+	EXPECT_EQ(headerActObj.get_Number(),           header.get_Number());
+	EXPECT_EQ(headerActObj.get_GasLimit(),         header.get_GasLimit());
+	EXPECT_EQ(headerActObj.get_GasUsed(),          header.get_GasUsed());
+	EXPECT_EQ(headerActObj.get_Timestamp(),        header.get_Timestamp());
+	EXPECT_EQ(headerActObj.get_ExtraData(),        header.get_ExtraData());
+	EXPECT_EQ(headerActObj.get_MixHash(),          header.get_MixHash());
+	EXPECT_EQ(headerActObj.get_Nonce(),            header.get_Nonce());
+	EXPECT_EQ(headerActObj.get_BaseFee(),          header.get_BaseFee());
+	EXPECT_EQ(headerActObj.get_WithdrawalsHash(),  header.get_WithdrawalsHash());
 }
