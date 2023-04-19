@@ -322,14 +322,18 @@ GTEST_TEST(TestAdvRlpCatDict, Parser)
 		auto expOut = GetExpectedObj();
 
 		auto actOut = GenericParser().Parse(input);
-		EXPECT_EQ(expOut, actOut);
+		EXPECT_NO_THROW(
+			EXPECT_EQ(expOut.AsDict(), actOut.AsDict());
+		);
 	}
 	{
 		auto input = GetExpectedAdvRlp();
 		auto expOut = GetExpectedObj();
 
 		auto actOut = Parse(input);
-		EXPECT_EQ(expOut, actOut);
+		EXPECT_NO_THROW(
+			EXPECT_EQ(expOut.AsDict(), actOut.AsDict());
+		);
 	}
 }
 
