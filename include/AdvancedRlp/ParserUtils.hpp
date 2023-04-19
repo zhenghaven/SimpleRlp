@@ -30,9 +30,9 @@ using PrimitiveParserBase = Internal::SimRlp::ListParserImpl<
 	Internal::SimRlp::FailingParserList>;
 
 
-template<typename _Transform, typename _InnerParser>
+template<typename _ContainerType, typename _Transform, typename _InnerParser>
 using CompositeParserBase = Internal::SimRlp::ListParserImpl<
-	Internal::SimRlp::InputContainerType,
+	_ContainerType,
 	Internal::SimRlp::ByteValType,
 	Internal::SimRlp::ListObjType,
 	_Transform,

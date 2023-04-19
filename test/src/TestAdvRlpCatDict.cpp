@@ -317,6 +317,20 @@ GTEST_TEST(TestAdvRlpCatDict, Parser)
 		auto actOut = CatDictParser().Parse(input);
 		EXPECT_EQ(expOut, actOut);
 	}
+	{
+		auto input = GetExpectedAdvRlp();
+		auto expOut = GetExpectedObj();
+
+		auto actOut = GenericParser().Parse(input);
+		EXPECT_EQ(expOut, actOut);
+	}
+	{
+		auto input = GetExpectedAdvRlp();
+		auto expOut = GetExpectedObj();
+
+		auto actOut = Parse(input);
+		EXPECT_EQ(expOut, actOut);
+	}
 }
 
 GTEST_TEST(TestAdvRlpCatDict, Writer)
